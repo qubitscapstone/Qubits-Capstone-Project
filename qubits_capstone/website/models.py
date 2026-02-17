@@ -1,12 +1,19 @@
+from unittest.util import _MAX_LENGTH
 from django.db import models
+from django.db.models.base import ModelState
 from django.utils import timezone
 from datetime import timedelta
 from django.core.validators import MaxValueValidator, MinValueValidator
+#Foriegnkey links two models together 
+#meta allows you to configure table level behavior
+#str___self determines how it is displayed
 
 
-# Create your models here.
+#-----------------------------------Patient Information----------------------------
+
+#Patient Data 
 class Patient(models.Model):
-    patient_id = models.AutoField(primary_key=True)
+    patient_id = models.AutoField(primary_key=True) # would we want this to be connected to an MRN?
     
     # Personal Information
     first_name = models.CharField(max_length=100)
@@ -15,14 +22,14 @@ class Patient(models.Model):
     gender = models.CharField(max_length=20)
     
     # Contact Details
-    contact_number = models.CharField(max_length=20)
+    contact_number = models.CharField(max_length=20)    #These things would be included in the EMR? 
     email = models.EmailField(unique=True)
     address = models.TextField()
     
     # Administrative Data
     registration_date = models.DateTimeField(auto_now_add=True)
-    insurance_provider = models.CharField(max_length=150)
-    insurance_number = models.CharField(max_length=50)
+    insurance_provider = models.CharField(max_length=150)  #do we need to know patient provider?
+    insurance_number = models.CharField(max_length=50)  #do we need to know the insurance?
 
      # 1. readable name of the patient
     def get_full_name(self):
@@ -30,12 +37,29 @@ class Patient(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+  # Care Team **** ADDED THIS****
+    doctor = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank= True,  
+                                limit_choices_to={"title__in": ["Doctor","MD","DO"]},
+                                related_name= "doctor_patients")
+    nurse = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank = True, # should we remove this would there not have to be a care provider for them to be in the ER? 
+                                limit_choices_to={"title__in": ["Nurse", "RN"]},
+                                                  related_name= "nurse_patients")
+    
 
+
+  #Should we add final traige score?
+
+    def get_full_name(self):
+     return f"{self.first_name} {self.last_name}"
+
+    def __str__(self):
+        return f"{self.get_full_name()}\n\tAssigned Dr: {self.doctor}\n\tAssigned Nurse: {self.nurse}"   
+
+
+#------------------------------------Visit Model-----------------------------
 class Visit(models.Model):
     # Primary Key - Auto-incrementing
-    visit_id = models.AutoField(primary_key=True)
+    visit_id = models.AutoField(primary_key=True) #Django creates its own IDs
     
     # Patient link
     patient_id = models.ForeignKey(
@@ -83,7 +107,8 @@ class Visit(models.Model):
 
     def __str__(self):
         return f"Visit {self.visit_id} (Queue Before: {self.queue_count_before_processing})"
-
+ 
+    #--------------------------------------Triage-------------------------------------
 
 class TriageAssessment(models.Model):
     triage_id = models.AutoField(primary_key=True)
@@ -96,7 +121,7 @@ class TriageAssessment(models.Model):
     )
     
     # Updated to point to the Staff model
-    staff_id = models.ForeignKey(
+    staff_id = models.ForeignKey( #is this for who is completing the assessemnt?
         'Staff', 
         on_delete=models.PROTECT, # Prevents deleting staff if they have linked records
         db_column='staff_id'
@@ -142,5 +167,29 @@ class Triage_scores(models.Model):
     def __str__(self):
         return f"ESI Level {self.esi_level} assigned by {self.assigned_by}
 
+#------------------------STAFF Information______________________________
+
+class Staff(models.Model):
+
+    # staff general information 
+    staff_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+
+    #title
+    department = models.CharField(max_length = 50)
+    primary_Hosptial = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)  
+    ext = models.CharField(max_length=100, null= True, blank = True)
+    title = models.CharField(max_length=50, null=True , blank= True)
+
+    def __str__(self):
+         return f"{self.first_name[0]},{self.last_name}, {self.title}"
+   
+    
 
 
+
+
+
+    
