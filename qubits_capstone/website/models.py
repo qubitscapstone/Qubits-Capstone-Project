@@ -165,7 +165,7 @@ class Triage_scores(models.Model):
     )
 
     def __str__(self):
-        return f"ESI Level {self.esi_level} assigned by {self.assigned_by}
+        return f"ESI Level {self.esi_level} assigned by {self.assigned_by}"
 
 #------------------------STAFF Information______________________________
 
