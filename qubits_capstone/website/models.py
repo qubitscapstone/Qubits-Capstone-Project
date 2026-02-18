@@ -8,6 +8,24 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 #meta allows you to configure table level behavior
 #str___self determines how it is displayed
 
+#------------------------STAFF Information______________________________
+
+class Staff(models.Model):
+
+    # staff general information 
+    staff_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+
+    #title
+    department = models.CharField(max_length = 50)
+    primary_Hosptial = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)  
+    ext = models.CharField(max_length=100, null= True, blank = True)
+    title = models.CharField(max_length=50, null=True , blank= True)
+
+    def __str__(self):
+         return f"{self.first_name[0]},{self.last_name}, {self.title}"
 
 #-----------------------------------Patient Information----------------------------
 
@@ -166,27 +184,6 @@ class Triage_scores(models.Model):
 
     def __str__(self):
         return f"ESI Level {self.esi_level} assigned by {self.assigned_by}"
-
-#------------------------STAFF Information______________________________
-
-class Staff(models.Model):
-
-    # staff general information 
-    staff_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-
-    #title
-    department = models.CharField(max_length = 50)
-    primary_Hosptial = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)  
-    ext = models.CharField(max_length=100, null= True, blank = True)
-    title = models.CharField(max_length=50, null=True , blank= True)
-
-    def __str__(self):
-         return f"{self.first_name[0]},{self.last_name}, {self.title}"
-   
-    
 
 
 
