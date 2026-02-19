@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\qubits_capstone",
+    "\\qubits_capstone\\qubits_capstone",
     "\\qubits_capstone\\scripts",
-    "\\qubits_capstone\\website"
+    "\\qubits_capstone\\website",
+    "\\qubits_capstone\\website\\migrations",
+    "\\qubits_capstone\\website\\templates"
   ],
   "SelectedNode": "\\qubits_capstone\\website\\models.py",
   "PreviewInSolutionExplorer": false
