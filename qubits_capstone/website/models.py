@@ -56,7 +56,7 @@ class Patient(models.Model):
     doctor = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank= True,  
                                 limit_choices_to={"title__in": ["Doctor","MD","DO"]},
                                 related_name= "doctor_patients")
-    nurse = models.ForeignKey(Staff, on_delete=models.SET_NULL, 
+    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE, 
                                 limit_choices_to={"title__in": ["Nurse", "RN"]},
                                                   related_name= "nurse_patients")
     
@@ -182,7 +182,7 @@ class Triage_scores(models.Model):
     )
 
     def __str__(self):
-        return f"ESI Level {self.esi_level} assigned by {self.assigned_by}
+        return f"ESI Level {self.esi_level} assigned by {self.assigned_by}"
 
 
 
@@ -190,7 +190,7 @@ class Triage_scores(models.Model):
 
 class Vitals(models.Model):
     Vitals_id = models.AutoField(primary_key=True)
-    Triage_id = models.ForeignKey(Triage, on_delete=models.CASCADE, db_column='Triage_id')
+    Triage_id = models.ForeignKey(Triage_scores, on_delete=models.CASCADE, db_column='Triage_id')
     Age = models.IntegerField()
     Heart_rate = models.IntegerField()
     Systolic_blood_pressure = models.IntegerField()
@@ -205,7 +205,7 @@ class Vitals(models.Model):
         return f" Vitals were recorded at {self.time_of_vitals} \n\t HR: {self.heart_rate} \n\t Systolic BP: {self.systolic_blood_pressure} \n\t Pulse Ox:{self.oxygen_saturation} \n\t Body Temp:{self.body_temperature} \n\t Reported Painlevel:{self.pain_level}"
 
     class Meta:
-        ordering = ['time_of_vitals']
+        ordering = ['Time_of_vitals']
         verbose_name_plural = "Vitals"
 
 
