@@ -8,5 +8,5 @@ def home(request):
 
 def broken_table(request):
     all_visits= website.models.Visit.objects.all()
-    visits= {'all_visits': all_visits}
-    return render(request,"broken_table.html", visits)
+    context = {'all_visits': all_visits}
+    return render(request,"broken_table.html", context)
