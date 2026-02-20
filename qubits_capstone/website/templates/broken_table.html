@@ -1,0 +1,30 @@
+{% extends "base.html" %} 
+
+{% block title %}Home{% endblock %} 
+
+{% block content %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Waiiting Time</th>
+                <!-- <th scope="col">ESI Level</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for visit in visits %}
+                {% if visit.exiting_time == none %}
+                    <tr>
+                        <th scope="row">{% visit.patient_id.patient_id %}</th>
+                        <td>{% visit.patient_id.first_name %}</td>
+                        <td>{% visit.patient_id.last_name %}</td>
+                        <td>{% visit.waiting_time %}</td>
+                        <!-- <td>{% some code about the score here idk how to access it.%}</td> -->
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
