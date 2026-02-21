@@ -18,7 +18,7 @@ class Staff(models.Model):
     last_name = models.CharField(max_length=100)
 
     #title
-    speacialization = models.CharField(max_length = 50)
+    specialization = models.CharField(max_length = 50)
     primary_branch = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)  
     email = models.CharField(max_length= 100, null= True, blank = True)
@@ -56,9 +56,13 @@ class Patient(models.Model):
     doctor = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank= True,  
                                 limit_choices_to={"title__in": ["Doctor","MD","DO"]},
                                 related_name= "doctor_patients")
-    nurse = models.ForeignKey(Staff, on_delete=models.CASCADE, 
-                                limit_choices_to={"title__in": ["Nurse", "RN"]},
-                                                  related_name= "nurse_patients")
+    nurse = models.ForeignKey(Staff, 
+                              on_delete=models.CASCADE, 
+                              limit_choices_to={"title__in": ["Nurse", "RN"]},
+                              related_name= "nurse_patients", 
+                              #from Bailey: had to add for csv import to work. can delete later
+                              null=True,
+                              blank=True)
     
 
 
