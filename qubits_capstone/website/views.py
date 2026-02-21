@@ -6,7 +6,7 @@ import website.models
 def home(request):
     return render(request,"home.html")
 
-def broken_table(request):
+def in_building(request):
     all_visits= website.models.Visit.objects.all()
     context = {'all_visits': all_visits}
-    return render(request,"broken_table.html", context)
+    return render(request,"in_building.html", context)
