@@ -5,9 +5,17 @@
 {% block content %}
 <div class="text-center">
   <p class="display-4">QUBITS</p>
-
-  <a href="{% url 'login' %}" class="btn btn-primary mt-3">
-    Log in
-  </a>
+  <!-- https://learndjango.com/tutorials/django-login-and-logout-tutorial -->
+  {% if user.is_authenticated %}
+      Welcome {{ user.username }}!
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Log Out</button>
+      </form>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn btn-primary mt-3">
+      Log in
+    </a>
+  {% endif %}
 </div>
 {% endblock %}
