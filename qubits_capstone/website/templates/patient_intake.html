@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Intake{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <p class="display-4">Patient Intake</p>
+
+    <!-- Only allow new patient intake if user is logged in -->
+    {% if user.is_authenticated %}
+
+    <!-- Patient Info -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
+        Patient Info Modal
+    </button>
+    <div class="modal fade" id="patient-info-modal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Patient Intake</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Patient Intake Modal</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}
