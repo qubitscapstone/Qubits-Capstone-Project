@@ -6,15 +6,14 @@ import website.models
 def home(request):
     return render(request,"home.html")
 
-def in_building(request):
-    all_visits= website.models.Visit.objects.all()
-    context = {'all_visits': all_visits}
-    return render(request,"in_building.html", context)
-
 ## example of creating objects using model is in csv script
 ## TODO create new_intake view function
+def patient_intake(request):
     # if the request a post request (submit button was clicked)
-        # create new patient object
-        # create new vitals object
+    # create new patient object
+    # create new vitals object
     # else (request is a get request)
-        # return page render 
+        # return page render (include the three lines below this)
+    all_visits= website.models.Visit.objects.all()
+    context = {'all_visits': all_visits}    
+    return render(request,"patient_intake.html", context)
