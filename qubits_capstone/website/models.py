@@ -74,7 +74,7 @@ class Patient(models.Model):
     def __str__(self):
         return f"{self.get_full_name()}\n\tAssigned Dr: {self.doctor}\n\tAssigned Nurse: {self.nurse}"   
 
-#-----------------------------------Vitals---------------------------------------
+
 
 
 #------------------------------------Visit Model-----------------------------
