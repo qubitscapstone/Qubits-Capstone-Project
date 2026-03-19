@@ -20,17 +20,88 @@
                     <h5 class="modal-title">Patient Intake</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p>Patient Intake Modal</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form action="/your-name/" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <div class="modal-body">
+                        <p>Patient Intake Modal</p>
+                        <label for="first_name" class="form-label">First name:</label>
+                        <input type="text" id="first_name" name="first_name" class="form-control" required>
+                        <label for="last_name" class="form-label">Last name:</label>
+                        <input type="text" id="last_name" name="last_name" class="form-control" required>
+                        <label for="gender" class="form-label">Sex:</label>
+                        <select name="gender" id="gender" class="form-control" required>
+                            <option value="" selected disabled>-- Select Sex --</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="date_of_birth" class="form-label">Date of birth:</label>
+                        <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     {% endif %}
+
+      <!-- Vitals -->
+<button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#vitals-modal">
+    Vitals
+</button>
+
+<div class="modal fade" id="vitals-modal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vitals</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ vitals_form.as_p }}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    
+        <!-- All Current Patients -->
+        <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Waiting Time</th>
+                <th scope="col">ESI Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for visit in all_visits %}
+                {% if not visit.exiting_time %}
+                    <tr>
+                        <th scope="row">{{ visit.patient_id.patient_id }}</th>
+                        <td>{{ visit.patient_id.first_name }}</td>
+                        <td>{{ visit.patient_id.last_name }}</td>
+                        <td>{{ visit.waiting_time }}</td>
+                        <td>Null</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
