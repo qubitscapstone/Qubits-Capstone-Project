@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 import website.models
-## import the two forms form forms.py
+from .forms import PatientForm, VitalsForm
 
 @login_required
 def home(request):
@@ -11,11 +11,18 @@ def home(request):
 ## TODO create new_intake view function
 def patient_intake(request):
     # if the request a post request (submit button was clicked)
-    # create new patient object
-    # create new vitals object
-    # else (request is a get request)
-        # return page render (include the lines below this)
-    all_visits= website.models.Visit.objects.all()
-    context = {'all_visits': all_visits}    
-    # be sure to add the form into this below
-    return render(request,"patient_intake.html", context)
+    if request.method == "POST":
+        patient_form = PatientForm(request.POST)
+        vitals_form = VitalsForm(request.POST)
+        if patient_form.is_valid() and vitals_form.is_valid():
+           patient = patient_form.save(commit=False)
+           patient.save()
+           vitals = vitals_form.save(commit=False)
+           vitals.save()
+           return redirect("intake_success")
+    else:
+        patient_form = PatientForm()
+        vitals_form = VitalsForm()
+        all_visits= website.models.Visit.objects.all()
+        context = {'all_visits': all_visits, 'patient_form': patient_form, 'vitals_form': vitals_form}
+        return render(request,"patient_intake.html", context)
