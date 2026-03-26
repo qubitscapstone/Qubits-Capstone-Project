@@ -128,12 +128,41 @@ class Visit(models.Model):
 
     def __str__(self):
         return f"Visit {self.visit_id} (Queue Before: {self.queue_count_before_processing})"
+    
+#-----------------------------Vitals----------------------------------------
+
+class Vitals(models.Model):
+    Vitals_id = models.AutoField(primary_key=True)
+
+    Age = models.IntegerField()
+    Heart_rate = models.IntegerField()
+    Systolic_blood_pressure = models.IntegerField()
+    Oxygen_saturation= models.IntegerField()
+    Body_temperature= models.DecimalField(max_digits=4, decimal_places=1)
+    Pain_level=models.IntegerField()
+    Chronic_disease_count = models.IntegerField()
+
+    Time_of_vitals = models.DateTimeField(auto_now_add= True)
+
+    def __str__(self):
+        return f" Vitals were recorded at {self.time_of_vitals} \n\t HR: {self.heart_rate} \n\t Systolic BP: {self.systolic_blood_pressure} \n\t Pulse Ox:{self.oxygen_saturation} \n\t Body Temp:{self.body_temperature} \n\t Reported Painlevel:{self.pain_level}"
+
+    class Meta:
+        ordering = ['Time_of_vitals']
+        verbose_name_plural = "Vitals"
  
     #--------------------------------------Triage-------------------------------------
 
 class TriageAssessment(models.Model):
     triage_id = models.AutoField(primary_key=True)
     
+    vitals_id = models.ForeignKey(
+        'Vitals', 
+        on_delete=models.PROTECT, 
+        related_name='triage_assessments',
+        db_column='vitals_id'
+    )
+
     visit_id = models.ForeignKey(
         'Visit', 
         on_delete=models.CASCADE, 
@@ -190,27 +219,7 @@ class Triage_scores(models.Model):
 
 
 
-#-----------------------------Vitals----------------------------------------
 
-class Vitals(models.Model):
-    Vitals_id = models.AutoField(primary_key=True)
-    Triage_id = models.ForeignKey(Triage_scores, on_delete=models.CASCADE, db_column='Triage_id')
-    Age = models.IntegerField()
-    Heart_rate = models.IntegerField()
-    Systolic_blood_pressure = models.IntegerField()
-    Oxygen_saturation= models.IntegerField()
-    Body_temperature= models.DecimalField(max_digits=4, decimal_places=1)
-    Pain_level=models.IntegerField()
-    Chronic_disease_count = models.IntegerField()
-
-    Time_of_vitals = models.DateTimeField(auto_now_add= True)
-
-    def __str__(self):
-        return f" Vitals were recorded at {self.time_of_vitals} \n\t HR: {self.heart_rate} \n\t Systolic BP: {self.systolic_blood_pressure} \n\t Pulse Ox:{self.oxygen_saturation} \n\t Body Temp:{self.body_temperature} \n\t Reported Painlevel:{self.pain_level}"
-
-    class Meta:
-        ordering = ['Time_of_vitals']
-        verbose_name_plural = "Vitals"
 
 
 
