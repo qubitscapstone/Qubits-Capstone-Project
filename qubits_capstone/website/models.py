@@ -43,7 +43,7 @@ class Patient(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
-    gender = models.CharField(max_length=20) #our output should say sex, not gender
+    gender = models.CharField(max_length=6, choices=(('male','Male'),('female', 'Female'),('other','Other'))) #our output should say sex, not gender
     
     
      # 1. readable name of the patient
