@@ -7,19 +7,22 @@ from .forms import PatientForm, VitalsForm
 def home(request):
     return render(request,"home.html")
 
-## example of creating objects using model is in csv script
-## TODO create new_intake view function
 def patient_intake(request):
-    # if the request a post request (submit button was clicked)
     if request.method == "POST":
-        patient_form = PatientForm(request.POST)
-        vitals_form = VitalsForm(request.POST)
-        if patient_form.is_valid() and vitals_form.is_valid():
-           patient = patient_form.save(commit=False)
-           patient.save()
-           vitals = vitals_form.save(commit=False)
-           vitals.save()
-           return redirect("intake_success")
+        #which submit button was clicked?
+        if 'patient_submit' in request.POST:
+            patient_form = PatientForm(request.POST)
+            if patient_form.is_valid():
+                patient = patient_form.save(commit=False)
+                patient.save()
+        elif 'vitals_submit' in request.POST:
+            vitals_form = VitalsForm(request.POST)
+            if vitals_form.is_valid():
+                vitals = vitals_form.save(commit=False)
+                vitals.save()
+        # return redirect("intake_success")         ----- we do not have this page yet
+        #just refreshes the page for now until we get sucess messages
+        return render(request,"patient_intake.html", context)
     else:
         patient_form = PatientForm()
         vitals_form = VitalsForm()
