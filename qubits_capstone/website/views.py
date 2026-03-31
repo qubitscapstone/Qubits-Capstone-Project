@@ -28,12 +28,9 @@ def patient_intake(request):
                 vitals_form.save()
             else:
                 print(vitals_form.errors)
-        else:
-            patient_form = PatientForm()
-            vitals_form = VitalsForm()
-    else:
-        patient_form = PatientForm()
-        vitals_form = VitalsForm()
+
+    patient_form = PatientForm()
+    vitals_form = VitalsForm()
 
     context = {
         "all_visits": all_visits,
