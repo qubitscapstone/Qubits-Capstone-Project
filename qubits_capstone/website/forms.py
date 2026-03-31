@@ -82,3 +82,35 @@ class VitalsForm(forms.ModelForm):
                     'class': 'form-control', 
                     'required': True, } )
         }
+
+class HighRiskForm(forms.Form):
+    life_saving_intervention = forms.ChoiceField(
+        label = "Is immediate lifesaving intervention needed?",
+        choices = [( False, "No"),
+                    (True, "Yes")],
+        widget = forms.Select(attrs={"class": "form-select"}))
+    
+    high_risk = forms.ChoiceField(
+        label = "Is this a high-risk situation?",
+        choices = [( False, "No"),
+                    (True, "Yes")],
+        widget = forms.Select(attrs={"class": "form-select"}))
+    
+    disoriented = forms.ChoiceField(
+        label = "Is the patient confused, lethargic, or disoriented?",
+        choices = [( False, "No"),
+                    (True, "Yes")],
+        widget = forms.Select(attrs={"class": "form-select"}))
+    
+    severe_pain = forms.ChoiceField(
+        label = "Is the patient in severe pain or distress?",
+        choices = [( False, "No"),
+                   (True, "Yes")],
+        widget = forms.Select(attrs={"class": "form-select"}))
+    
+    diff_resources = forms.ChoiceField(
+        label = "How many different resources are needed",
+        choices = [(0, "None"),
+                   (1, "One"), 
+                   (2, "Many")],
+        widget = forms.Select(attrs={"class": "form-select"}))

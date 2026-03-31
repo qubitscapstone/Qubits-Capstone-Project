@@ -9,61 +9,82 @@
     <!-- Only allow new patient intake if user is logged in -->
     {% if user.is_authenticated %}
 
-    <!-- Patient Info -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
-        Patient Info Modal
-    </button>
-    <div class="modal fade" id="patient-info-modal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Patient Intake</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Patient Info -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
+            Patient Info
+        </button>
+        <div class="modal fade" id="patient-info-modal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Patient Intake</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url 'patient_intake' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {{ patient_form.as_p }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="patient_submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
-                <form action="{% url 'patient_intake' %}" method="post">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        {{ patient_form.as_p }}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="patient_submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
+        <!-- High Risk Situations -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#high-risk-modal">
+            High Risk
+        </button>
+        <div class="modal fade" id="high-risk-modal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">High Risk</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url 'patient_intake' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {{ high_risk_form.as_p }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="high_risk_submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Vitals -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vitals-modal">
+            Vitals
+        </button>
 
+        <div class="modal fade" id="vitals-modal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Vitals</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form action="{% url 'patient_intake' %}"  method="post">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {{ vitals_form.as_p }}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="vitals_submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% endif %}
-
-      <!-- Vitals -->
-<button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#vitals-modal">
-    Vitals
-</button>
-
-<div class="modal fade" id="vitals-modal" data-bs-backdrop="static" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Vitals</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <form action="{% url 'patient_intake' %}"  method="post">
-                {% csrf_token %}
-                <div class="modal-body">
-                    {{ vitals_form.as_p }}
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="vitals_submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-    
         <!-- All Current Patients -->
         <table class="table">
         <thead>
