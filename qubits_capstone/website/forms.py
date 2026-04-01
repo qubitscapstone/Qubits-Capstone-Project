@@ -39,8 +39,9 @@ class PatientForm(forms.ModelForm):
 class VitalsForm(forms.ModelForm):
     class Meta:
         model = Vitals
-        fields=['Age', 'Heart_rate', 'Systolic_blood_pressure', 'Oxygen_saturation', 'Body_temperature', 'Pain_level', 'Chronic_disease_count']
+        fields=['visit_id', 'Age', 'Heart_rate', 'Systolic_blood_pressure', 'Oxygen_saturation', 'Body_temperature', 'Pain_level', 'Chronic_disease_count']
         labels={
+            'visit_id' : 'Visit ID',
             'Age' : 'Age', 
             'Heart_rate' : 'Heart rate', 
             'Systolic_blood_pressure' : 'Systolic blood pressure', 
@@ -50,6 +51,10 @@ class VitalsForm(forms.ModelForm):
             'Chronic_disease_count':'Chronic disease count'
         }
         widgets={
+            'visit_id' : forms.NumberInput( 
+                attrs={ 
+                    'class': 'form-control', 
+                    'required': True, } ),
             'Age' : forms.NumberInput( 
                 attrs={ 
                     'class': 'form-control', 

@@ -16,16 +16,13 @@ def patient_intake(request):
         if "patient_submit" in request.POST:
             patient_form = PatientForm(request.POST)
             if patient_form.is_valid():
-                patient_form.save()
+                patient = patient_form.save()
+
+                # create a visit for the patient immediately. (updates the table)
+                website.models.Visit.objects.create(patient_id = patient)
+
             else:
                 print(patient_form.errors)
-
-        elif "vitals_submit" in request.POST:
-            vitals_form = VitalsForm(request.POST)
-            if vitals_form.is_valid():
-                vitals_form.save()
-            else:
-                print(vitals_form.errors)
 
         elif "high_risk_submit" in request.POST:
             high_risk_form = HighRiskForm(request.POST)
@@ -34,6 +31,13 @@ def patient_intake(request):
                 pass
             else:
                 print(high_risk_form.errors)
+        
+        elif "vitals_submit" in request.POST:
+            vitals_form = VitalsForm(request.POST)
+            if vitals_form.is_valid():
+                vitals_form.save()
+            else:
+                print(vitals_form.errors)
 
     patient_form = PatientForm()
     high_risk_form = HighRiskForm()

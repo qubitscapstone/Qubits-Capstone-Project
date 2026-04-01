@@ -134,6 +134,13 @@ class Visit(models.Model):
 class Vitals(models.Model):
     Vitals_id = models.AutoField(primary_key=True)
 
+    visit_id = models.ForeignKey(
+        'Visit', 
+        on_delete=models.CASCADE, 
+        related_name='vitals',
+        db_column='visit_id'
+    )
+
     Age = models.IntegerField()
     Heart_rate = models.IntegerField()
     Systolic_blood_pressure = models.IntegerField()
@@ -158,7 +165,7 @@ class TriageAssessment(models.Model):
     
     vitals_id = models.ForeignKey(
         'Vitals', 
-        on_delete=models.PROTECT, 
+        on_delete=models.CASCADE, 
         related_name='triage_assessments',
         db_column='vitals_id'
     )
@@ -168,13 +175,6 @@ class TriageAssessment(models.Model):
         on_delete=models.CASCADE, 
         related_name='triage_assessments',
         db_column='visit_id'
-    )
-    
-    # Updated to point to the Staff model
-    staff_id = models.ForeignKey( #is this for who is completing the assessemnt?
-        'Staff', 
-        on_delete=models.PROTECT, # Prevents deleting staff if they have linked records
-        db_column='staff_id'
     )
     
     triage_time = models.DateTimeField(default=timezone.now)
@@ -206,13 +206,6 @@ class Triage_scores(models.Model):
     
     # Description of resources
     resources_needed = models.TextField()
-    
-    # Link to Staff (assigned_by)
-    assigned_by = models.ForeignKey(
-        'Staff', 
-        on_delete=models.PROTECT,
-        db_column='assigned_by' # Sets the database column name exactly
-    )
 
     def __str__(self):
         return f"ESI Level {self.esi_level} assigned by {self.assigned_by}"
