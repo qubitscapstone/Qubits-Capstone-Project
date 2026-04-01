@@ -57,7 +57,7 @@ class Patient(models.Model):
                                 limit_choices_to={"title__in": ["Doctor","MD","DO"]},
                                 related_name= "doctor_patients")
     nurse = models.ForeignKey(Staff, 
-                              on_delete=models.CASCADE, 
+                              on_delete=models.SET_NULL, 
                               limit_choices_to={"title__in": ["Nurse", "RN"]},
                               related_name= "nurse_patients", 
                               #from Bailey: had to add for csv import to work. can delete later
@@ -216,19 +216,3 @@ class Triage_scores(models.Model):
 
     def __str__(self):
         return f"ESI Level {self.esi_level} assigned by {self.assigned_by}"
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-    
