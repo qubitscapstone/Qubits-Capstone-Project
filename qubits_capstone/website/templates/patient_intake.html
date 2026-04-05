@@ -84,15 +84,43 @@
                 </div>
             </div>
         </div>
+        <!-- Icon found at https://www.flaticon.com/free-icons/exit" -->
+         <!-- Patient Left -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paitient-exit-modal">
+            <!-- Exit icon created by Freepik https://www.flaticon.com/free-icons/exit -->
+            <img src="/static/images/exit.png" class="invert" alt="exit button">
+        </button>
+         <div class="modal fade" id="paitient-exit-modal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Patient exited</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form action="{% url 'patient_intake' %}"  method="post">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            {{ patient_left_form.as_p }}
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="patient_left_submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% endif %}
-        <!-- All Current Patients -->
-        <table class="table">
+    <!-- All Current Patients -->
+    <table class="table">
         <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
-                <th scope="col">Waiting Time</th>
+                <th scope="col">Arrival Time</th>
                 <th scope="col">ESI Level</th>
             </tr>
         </thead>
@@ -103,7 +131,7 @@
                         <th scope="row">{{ visit.patient_id.patient_id }}</th>
                         <td>{{ visit.patient_id.first_name }}</td>
                         <td>{{ visit.patient_id.last_name }}</td>
-                        <td>{{ visit.waiting_time }}</td>
+                        <td>{{ visit.arrival_time }}</td>
                         <td>Null</td>
                     </tr>
                 {% endif %}

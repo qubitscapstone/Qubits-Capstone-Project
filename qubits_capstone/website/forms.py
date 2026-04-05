@@ -105,3 +105,9 @@ class HighRiskForm(forms.Form):
                    (1, "One"), 
                    (2, "Many")],
         widget = forms.Select(attrs={"class": "form-select"}))
+    
+class PatientLeftForm(forms.Form):
+    patient_id = forms.IntegerField(
+        label = "Please enter the ID of the patient who left",
+        widget = forms.NumberInput(attrs={"class": "form-control"})
+    )

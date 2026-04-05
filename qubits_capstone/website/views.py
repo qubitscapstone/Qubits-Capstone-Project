@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
-from .forms import PatientForm, VitalsForm, HighRiskForm
+from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm
 
 
 @login_required
@@ -30,6 +30,7 @@ def patient_intake(request):
         elif "high_risk_submit" in request.POST:
             high_risk_form = HighRiskForm(request.POST)
             if high_risk_form.is_valid():
+                # save in session to be used when vital is created
                 request.session['life_saving_intervention'] = high_risk_form.cleaned_data["life_saving_intervention"]
                 request.session['high_risk'] = high_risk_form.cleaned_data["high_risk"]
                 request.session['disoriented'] = high_risk_form.cleaned_data["disoriented"]
@@ -43,28 +44,51 @@ def patient_intake(request):
             if vitals_form.is_valid():
                 # save data from form
                 curr_vitals = vitals_form.save(commit=False)
+
                 # get visit object
                 visit_primary_key = request.session.get("current_visit_id")
-                # save data from session data from previous modals
                 curr_vitals.visit_id = website.models.Visit.objects.get(visit_id=visit_primary_key)
+
+                # save data from session data from previous modals
                 curr_vitals.life_saving_intervention = request.session.get("life_saving_intervention")
                 curr_vitals.high_risk = request.session.get("high_risk")
                 curr_vitals.disoriented = request.session.get("disoriented")
                 curr_vitals.severe_pain = request.session.get("severe_pain")
                 curr_vitals.diff_resources = request.session.get("diff_resources")
+
                 # commit everything to db
                 curr_vitals.save()
             else:
                 print(vitals_form.errors)
 
+        elif "patient_left_submit" in request.POST:
+            patient_left_form = PatientLeftForm(request.POST)
+            if patient_left_form.is_valid():
+                patient_that_left_id = patient_left_form.cleaned_data['patient_id']
+                # try to make sure patient exists
+                try:
+                    patient_that_left = website.models.Patient.objects.get(patient_id=patient_that_left_id)
+                    
+                    # delete patient
+                    patient_that_left.delete()
+                    print("Patient deleted")
+
+                except website.models.Patient.DoesNotExist:
+                    print("Patient does not exist")
+
+            else:
+                print(patient_left_form.errors)
+
     patient_form = PatientForm()
     high_risk_form = HighRiskForm()
     vitals_form = VitalsForm()
+    patient_left_form = PatientLeftForm()
 
     context = {
         "all_visits": all_visits,
         "patient_form": patient_form,
         "high_risk_form": high_risk_form,
         "vitals_form": vitals_form,
+        "patient_left_form" : patient_left_form
     }
     return render(request, "patient_intake.html", context)
