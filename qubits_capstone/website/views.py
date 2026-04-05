@@ -19,7 +19,10 @@ def patient_intake(request):
                 patient = patient_form.save()
 
                 # create a visit for the patient immediately. (updates the table)
-                website.models.Visit.objects.create(patient_id = patient)
+                visit = website.models.Visit.objects.create(patient_id = patient)
+
+                # save the visit id created to use in vitals creation
+                request.session['current_visit_id'] = visit.visit_id
 
             else:
                 print(patient_form.errors)
@@ -27,15 +30,28 @@ def patient_intake(request):
         elif "high_risk_submit" in request.POST:
             high_risk_form = HighRiskForm(request.POST)
             if high_risk_form.is_valid():
-                #TODO : high risk handling 
-                pass
+                request.session['life_saving_intervention'] = high_risk_form.cleaned_data["life_saving_intervention"]
+                request.session['high_risk'] = high_risk_form.cleaned_data["high_risk"]
+                request.session['disoriented'] = high_risk_form.cleaned_data["disoriented"]
+                request.session['severe_pain'] = high_risk_form.cleaned_data["severe_pain"]
+                request.session['diff_resources'] = high_risk_form.cleaned_data["diff_resources"]
             else:
                 print(high_risk_form.errors)
         
         elif "vitals_submit" in request.POST:
             vitals_form = VitalsForm(request.POST)
             if vitals_form.is_valid():
-                vitals_form.save()
+                # save data from form
+                curr_vitals = vitals_form.save(commit=False)
+                # get visit object
+                visit_primary_key = request.session.get("current_visit_id")
+                # save data from session data from previous modals
+                curr_vitals.visit_id = website.models.Visit.objects.get(visit_id=visit_primary_key)
+                curr_vitals.life_saving_intervention = request.session.get("life_saving_intervention")
+                curr_vitals.severe_pain = request.session.get("severe_pain")
+                curr_vitals.diff_resources = request.session.get("diff_resources")
+                # commit everything to db
+                curr_vitals.save()
             else:
                 print(vitals_form.errors)
 
