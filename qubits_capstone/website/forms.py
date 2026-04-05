@@ -27,13 +27,11 @@ class PatientForm(forms.ModelForm):
             'date_of_birth' : forms.DateInput( 
                 attrs={ 
                     'class': 'form-control', 
-                    'type': 'date',
-                    'required': True, } ),
+                    'type': 'date'} ),
 
             'gender': forms.Select( 
                 attrs={ 
-                    'class': 'form-select', 
-                    'required': True, } )
+                    'class': 'form-select'})
         }
 
 class VitalsForm(forms.ModelForm):
@@ -57,60 +55,53 @@ class VitalsForm(forms.ModelForm):
                     'required': True, } ),
             'Age' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } ),
+                    'class': 'form-control'} ),
 
             'Heart_rate' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } ),
+                    'class': 'form-control'} ),
 
             'Systolic_blood_pressure' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } ),
+                    'class': 'form-control'} ),
 
             'Oxygen_saturation': forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } ),
+                    'class': 'form-control'} ),
             'Body_temperature' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } ),
+                    'class': 'form-control'} ),
             'Pain_level' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } ),
+                    'class': 'form-control'} ),
             'Chronic_disease_count' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control', 
-                    'required': True, } )
+                    'class': 'form-control'} )
         }
 
 class HighRiskForm(forms.Form):
     life_saving_intervention = forms.ChoiceField(
         label = "Is immediate lifesaving intervention needed?",
-        choices = [( False, "No"),
-                    (True, "Yes")],
+        choices = [( 0, "No"),
+                    (1, "Yes")],
         widget = forms.Select(attrs={"class": "form-select"}))
     
     high_risk = forms.ChoiceField(
         label = "Is this a high-risk situation?",
-        choices = [( False, "No"),
-                    (True, "Yes")],
+        choices = [( 0, "No"),
+                    (1, "Yes")],
         widget = forms.Select(attrs={"class": "form-select"}))
     
     disoriented = forms.ChoiceField(
         label = "Is the patient confused, lethargic, or disoriented?",
-        choices = [( False, "No"),
-                    (True, "Yes")],
+        choices = [( 0, "No"),
+                    (1, "Yes")],
         widget = forms.Select(attrs={"class": "form-select"}))
     
     severe_pain = forms.ChoiceField(
         label = "Is the patient in severe pain or distress?",
-        choices = [( False, "No"),
-                   (True, "Yes")],
+        choices = [( 0, "No"),
+                   (1, "Yes")],
         widget = forms.Select(attrs={"class": "form-select"}))
     
     diff_resources = forms.ChoiceField(

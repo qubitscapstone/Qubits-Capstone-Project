@@ -42,8 +42,8 @@ class Patient(models.Model):
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField()
-    gender = models.CharField(max_length=6, choices=(('male','Male'),('female', 'Female'),('other','Other'))) #our output should say sex, not gender
+    date_of_birth = models.DateField(null=True,  blank=True)
+    gender = models.CharField(max_length=6, choices=(('male','Male'),('female', 'Female'),('other','Other')), null=True, blank=True) #our output should say sex, not gender
     
     
      # 1. readable name of the patient
@@ -141,13 +141,18 @@ class Vitals(models.Model):
         db_column='visit_id'
     )
 
-    Age = models.IntegerField()
-    Heart_rate = models.IntegerField()
-    Systolic_blood_pressure = models.IntegerField()
-    Oxygen_saturation= models.IntegerField()
-    Body_temperature= models.DecimalField(max_digits=4, decimal_places=1)
-    Pain_level=models.IntegerField()
-    Chronic_disease_count = models.IntegerField()
+    Age = models.IntegerField(blank = True, default = 35)
+    Heart_rate = models.IntegerField(blank = True, default = 61)
+    Systolic_blood_pressure = models.IntegerField(blank = True, default = 101)
+    Oxygen_saturation= models.IntegerField(blank = True, default = 91)
+    Body_temperature= models.DecimalField(max_digits=4, decimal_places=1, blank = True, default = 96.0)
+    Pain_level=models.IntegerField(blank = True, default = 0)
+    Chronic_disease_count = models.IntegerField(blank = True, default = 0)
+    life_saving_intervention = models.IntegerField(null=True)
+    high_risk = models.IntegerField(null=True)
+    disoriented = models.IntegerField(null=True)
+    severe_pain = models.IntegerField(null=True)
+    diff_resources = models.IntegerField(null=True)
 
     Time_of_vitals = models.DateTimeField(auto_now_add= True)
 
