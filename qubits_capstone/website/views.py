@@ -48,6 +48,8 @@ def patient_intake(request):
                 # save data from session data from previous modals
                 curr_vitals.visit_id = website.models.Visit.objects.get(visit_id=visit_primary_key)
                 curr_vitals.life_saving_intervention = request.session.get("life_saving_intervention")
+                curr_vitals.high_risk = request.session.get("high_risk")
+                curr_vitals.disoriented = request.session.get("disoriented")
                 curr_vitals.severe_pain = request.session.get("severe_pain")
                 curr_vitals.diff_resources = request.session.get("diff_resources")
                 # commit everything to db
