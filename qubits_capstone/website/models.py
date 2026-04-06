@@ -89,6 +89,8 @@ class Visit(models.Model):
         related_name='visits',
         db_column='patient_id'
     )
+
+    complaint = models.CharField(blank = True, null = True)
     
     arrival_time = models.DateTimeField(default=timezone.now)
     exiting_time = models.DateTimeField(null=True, blank=True)

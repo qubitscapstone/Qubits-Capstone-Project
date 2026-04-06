@@ -37,10 +37,11 @@ class PatientForm(forms.ModelForm):
 class VitalsForm(forms.ModelForm):
     class Meta:
         model = Vitals
-        fields=['Age', 'Heart_rate', 'Systolic_blood_pressure', 'Oxygen_saturation', 'Body_temperature', 'Pain_level', 'Chronic_disease_count']
+        fields=['Age', 'Heart_rate', 'Respiratory_rate', 'Systolic_blood_pressure', 'Oxygen_saturation', 'Body_temperature', 'Pain_level', 'Chronic_disease_count']
         labels={
             'Age' : 'Age', 
             'Heart_rate' : 'Heart rate', 
+            'Respiratory_rate' : 'Respiratory rate',
             'Systolic_blood_pressure' : 'Systolic blood pressure', 
             'Oxygen_saturation' : 'Oxygen saturation', 
             'Body_temperature' : 'Body temperature', 
@@ -55,7 +56,9 @@ class VitalsForm(forms.ModelForm):
             'Heart_rate' : forms.NumberInput( 
                 attrs={ 
                     'class': 'form-control'} ),
-
+            'Respiratory_rate' : forms.NumberInput( 
+                attrs={ 
+                    'class': 'form-control'} ),
             'Systolic_blood_pressure' : forms.NumberInput( 
                 attrs={ 
                     'class': 'form-control'} ),
@@ -73,8 +76,21 @@ class VitalsForm(forms.ModelForm):
                 attrs={ 
                     'class': 'form-control'} )
         }
+        # ESI score override
+    esi_override = forms.IntegerField(
+        label = "ESI level override",
+        required=False,
+        min_value=1,
+        max_value=5,
+        widget = forms.NumberInput(attrs={"class": "form-control"})
+)
 
 class HighRiskForm(forms.Form):
+    complaint = forms.CharField(
+        label = "Chief complaints for this visit",
+        required=False,
+        widget= forms.Textarea(attrs={"class": "form-control", "rows":3}))
+    
     life_saving_intervention = forms.ChoiceField(
         label = "Is immediate lifesaving intervention needed?",
         choices = [( 0, "No"),
