@@ -86,10 +86,10 @@ class VitalsForm(forms.ModelForm):
 )
 
 class HighRiskForm(forms.Form):
-    complaint = forms.CharField(
-        label = "Chief complaints for this visit",
-        required=False,
-        widget= forms.Textarea(attrs={"class": "form-control", "rows":3}))
+    # complaint = forms.CharField(
+    #     label = "Chief complaints for this visit",
+    #     required=False,
+    #     widget= forms.Textarea(attrs={"class": "form-control", "rows":3}))
     
     life_saving_intervention = forms.ChoiceField(
         label = "Is immediate lifesaving intervention needed?",

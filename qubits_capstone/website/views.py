@@ -34,10 +34,10 @@ def patient_intake(request):
             if high_risk_form.is_valid():
 
                 # get visit and save the complaint to it
-                visit_primary_key = request.session.get("current_visit_id")
-                visit = website.models.Visit.objects.get(visit_id=visit_primary_key)
-                visit.complaint = high_risk_form.cleaned_data["complaint"]
-                visit.save()
+                # visit_primary_key = request.session.get("current_visit_id")
+                # visit = website.models.Visit.objects.get(visit_id=visit_primary_key)
+                # visit.complaint = high_risk_form.cleaned_data["complaint"]
+                # visit.save()
 
                 # save in session to be used when vital is created
                 request.session['life_saving_intervention'] = high_risk_form.cleaned_data["life_saving_intervention"]
