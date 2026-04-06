@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
 from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm
+from django.contrib import messages
 
 
 @login_required
@@ -71,10 +72,10 @@ def patient_intake(request):
                     
                     # delete patient
                     patient_that_left.delete()
-                    print("Patient deleted")
+                    messages.success(request, "Patient has been deleted.")
 
                 except website.models.Patient.DoesNotExist:
-                    print("Patient does not exist")
+                    messages.error(request, "Patient does not exist.")
 
             else:
                 print(patient_left_form.errors)

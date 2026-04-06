@@ -30,10 +30,19 @@
         </div>
 
     </nav>
-
+    <!-- Messages -->
+    {% for message in messages %}
+        <div class="container-fluid p-0">
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>  
+    {% endfor %}
     <!-- Main content -->
     <div class="container mt-4">
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
 
     <!-- Bootstrap JS -->
