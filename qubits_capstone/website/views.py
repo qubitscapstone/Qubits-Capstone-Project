@@ -57,7 +57,8 @@ def patient_intake(request):
 
                 # get visit object
                 visit_primary_key = request.session.get("current_visit_id")
-                curr_vitals.visit_id = website.models.Visit.objects.get(visit_id=visit_primary_key)
+                current_visit = website.models.Visit.objects.get(visit_id=visit_primary_key)
+                curr_vitals.visit_id = current_visit
 
                 # save data from session data from previous modals
                 curr_vitals.life_saving_intervention = request.session.get("life_saving_intervention")
