@@ -73,6 +73,7 @@ def patient_intake(request):
                 # get the score if they manually entered it
                 esi_score = vitals_form.cleaned_data.get("esi_override")
 
+                #TO DO: Get ESI script data to the database and front end
                 # # if no override, calculate using script
                 # if not esi_score:
                 #     esi_score = get_esi_for_vital_id(curr_vitals.Vitals_id)
@@ -120,6 +121,7 @@ def patient_intake(request):
         "patient_form": patient_form,
         "high_risk_form": high_risk_form,
         "vitals_form": vitals_form,
-        "patient_left_form" : patient_left_form
+        "patient_left_form" : patient_left_form, 
+        # "ESI_result" : esi_score
     }
     return render(request, "patient_intake.html", context)
