@@ -68,7 +68,9 @@ class VitalsForm(forms.ModelForm):
                     'class': 'form-control'} ),
             'Body_temperature' : forms.NumberInput( 
                 attrs={ 
-                    'class': 'form-control'} ),
+                    'class': 'form-control', 
+                    'max': '200.9',
+                    'min': '0'} ),
             'Pain_level' : forms.NumberInput( 
                 attrs={ 
                     'class': 'form-control'} ),
@@ -77,13 +79,13 @@ class VitalsForm(forms.ModelForm):
                     'class': 'form-control'} )
         }
         # ESI score override
-    esi_override = forms.IntegerField(
-        label = "ESI level override",
-        required=False,
-        min_value=1,
-        max_value=5,
-        widget = forms.NumberInput(attrs={"class": "form-control"})
-)
+    # esi_override = forms.IntegerField(
+    #     label = "ESI level override",
+    #     required=False,
+    #     min_value=1,
+    #     max_value=5,
+    #     widget = forms.NumberInput(attrs={"class": "form-control"})
+# )
 
 class HighRiskForm(forms.Form):
     # complaint = forms.CharField(
