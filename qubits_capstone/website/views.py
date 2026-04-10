@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 import website.models
 from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm
 from django.contrib import messages
-# from .webapp_scripts.esi_logic import get_esi_for_vital_id
+# from scripts.esi_calculation import calculate_esi
+from .webapp_scripts.esi_logic import get_esi_for_vital_id
 
 
 @login_required
@@ -75,12 +76,21 @@ def patient_intake(request):
 
                 #TO DO: Get ESI script data to the database and front end
                 # # if no override, calculate using script
-                # if not esi_score:
-                #     esi_score = get_esi_for_vital_id(curr_vitals.Vitals_id)
+                if not esi_score:
+                    esi_score = get_esi_for_vital_id(curr_vitals.Vitals_id)
 
                 # # after obtaining level, save assessment and score
-                # curr_assessment = website.models.TriageAssessment.objects.create(vitals_id = curr_vitals, visit_id = curr_visit)
-                # website.models.Triage_scores.objects.create(triage_id=curr_assessment, esi_level = esi_score)
+                curr_assessment = website.models.TriageAssessment.objects.create(vitals_id = curr_vitals, visit_id = curr_visit)
+
+                #save ESI score
+                website.models.Triage_scores.objects.create(triage_id=curr_assessment, esi_level = esi_score)
+
+                # pass result to HTML
+                return render(request, 'qubits_capstone/patient_intake.html'),{
+                     'show_result': True,
+                     'esi_score': esi_score,
+                }
+            
 
                 # after everything has saved, remove saved session values to avoid errors in later entries
                 request.session.pop('current_visit_id', None)    

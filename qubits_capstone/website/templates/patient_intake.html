@@ -96,6 +96,58 @@
                 </div>
             </div>
         </div>
+          <!-- ESI Model -->
+         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ESI-modal">
+            ESI
+        </button>
+        <div class="modal fade" id="ESI-modal" data-bs-backdrop="static" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">ESI Output</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                <!-- loading screen -->
+                 <div id="loading" class="text-center">
+                    <div class="spinner-border text-light" role="status"></div>
+                    <p class="mt-2 text-light">Loading...</p>
+                 </div>
+                 <!-- Result -->
+                  {% if show_result %}
+                <div id="esi-result">
+                    
+                <!-- ESI Color -->
+                <p class="text-muted mb-1">ESI Level</p>
+                 <span class="badge fs-4
+                     {% if esi_score == 1 %}bg-danger
+                     {% elif esi_score == 2 %}bg-warning text-dark
+                     {% elif esi_score == 3 %}bg-info text-dark
+                     {% elif esi_score == 4 %}bg-primary
+                     {% else %}bg-success
+                     {% endif %}">
+                 Level {{ esi_score }}
+             </span>
+
+                  <!-- ESI Description -->
+               <p class="mt-3 fw-semibold">
+                    {% if esi_score == 1 %}Most Urgent
+                    {% elif esi_score == 2 %}High Urgency 
+                    {% elif esi_score == 3 %}Low Urgency
+                    {% elif esi_score == 4 %}Least Urgent
+                    {% else %}Non Urgent 
+                    {% endif %}
+                 </p>
+
+                </div>
+                {% endif %}
+        </div>
+    </div>
+</div>
+              
+
         <!-- Icon found at https://www.flaticon.com/free-icons/exit" -->
          <!-- Patient Left -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paitient-exit-modal">
