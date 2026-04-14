@@ -79,18 +79,8 @@ def patient_intake(request):
                 if not esi_score:
                     esi_score = get_esi_for_vital_id(curr_vitals.Vitals_id)
 
-                # # after obtaining level, save assessment and score
-                curr_assessment = website.models.TriageAssessment.objects.create(vitals_id = curr_vitals, visit_id = curr_visit)
-
-                #save ESI score
-                website.models.Triage_scores.objects.create(triage_id=curr_assessment, esi_level = esi_score)
-
-                # pass result to HTML
-                return render(request, 'qubits_capstone/patient_intake.html'),{
-                     'show_result': True,
-                     'esi_score': esi_score,
-                }
-            
+                # save ESI score in DB
+                website.models.TriageAssessment.objects.create(visit_id=current_visit, esi_level = esi_score)
 
                 # after everything has saved, remove saved session values to avoid errors in later entries
                 request.session.pop('current_visit_id', None)    
