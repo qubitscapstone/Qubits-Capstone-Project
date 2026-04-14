@@ -135,3 +135,11 @@ def patient_intake(request):
         # "ESI_result" : esi_score
     }
     return render(request, "patient_intake.html", context)
+
+@login_required
+def shift(request):
+    return render(request, "shift.html")
+
+@login_required
+def nurse_workload(request):
+    return render(request, "nurse_workload.html")

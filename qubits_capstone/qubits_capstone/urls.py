@@ -23,5 +23,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("", views.home, name="home"),
     path("home", views.home, name="home2"),
-    path("patient_intake", views.patient_intake, name="patient_intake")
+    path("patient_intake", views.patient_intake, name="patient_intake"), 
+    path("nurse_workload", views.nurse_workload, name="nurse_workload"),
+    path("shift", views.shift, name="shift")
 ]
