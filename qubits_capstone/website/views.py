@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 import website.models
 from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm
 from django.contrib import messages
-# from scripts.esi_calculation import calculate_esi
+from scripts.esi_calculation import calculate_esi
 from .webapp_scripts.esi_logic import get_esi_for_vital_id
 
 
