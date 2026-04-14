@@ -8,22 +8,40 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 #meta allows you to configure table level behavior
 #str___self determines how it is displayed
 
-#------------------------STAFF Information______________________________
+#------------------------Shift Information------------------------
+
+
+#------------------------STAFF Information------------------------
 
 class Staff(models.Model):
     # opted out of years of experience, unnecessary 
     # staff general information 
     staff_id = models.AutoField(primary_key=True)
+    
+    # uncomment after shift model is done 
+    # shift_id = models.ForeignKey(
+    #     'Shift', 
+    #     related_name='shift',
+    #     db_column='shift_id'
+    # )
+
     first_name = models.CharField(max_length=100)
+
     last_name = models.CharField(max_length=100)
 
     #title
     specialization = models.CharField(max_length = 50)
+
     primary_branch = models.CharField(max_length=100)
+
     phone_number = models.CharField(max_length=15)  
+
     email = models.CharField(max_length= 100, null= True, blank = True)
+
     # the current csv file only contains Dr.'s, the staff that will use this tool the most will be nurses
     title = models.CharField(max_length=50, null=True , blank= True)
+
+
 
     def __str__(self):
          return f"{self.first_name[0]},{self.last_name}, {self.title}"
@@ -94,9 +112,7 @@ class Visit(models.Model):
     
     arrival_time = models.DateTimeField(default=timezone.now)
     exiting_time = models.DateTimeField(null=True, blank=True)
-    
-    waiting_time = models.DurationField(null=True, blank=True, editable=False)
-    
+        
     # These fields will now be calculated automatically
     queue_count_before_processing = models.IntegerField(default=0, editable=False)
     queue_count_after_processing = models.IntegerField(default=0, editable=False)
@@ -177,43 +193,14 @@ class TriageAssessment(models.Model):
         related_name='triage_assessments',
         db_column='vitals_id'
     )
-
-    visit_id = models.ForeignKey(
-        'Visit', 
-        on_delete=models.CASCADE, 
-        related_name='triage_assessments',
-        db_column='visit_id'
-    )
     
     triage_time = models.DateTimeField(default=timezone.now)
-    complaint = models.TextField()
-    
-    pain_score = models.IntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(10)]
-    )
-
-    def __str__(self):
-        return f"Triage {self.triage_id} by {self.staff_id}"
-
-class Triage_scores(models.Model):
-    # Primary Key - Auto-incrementing
-    score_id = models.AutoField(primary_key=True)
-    
-    # Link to Triage Assessment
-    triage_id = models.ForeignKey(
-        'TriageAssessment', 
-        on_delete=models.CASCADE, 
-        related_name='scores',
-        db_column='triage_id'
-    )
-    
+     
     # ESI Level (1 to 5)
     esi_level = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        null = True
     )
-    
-    # Description of resources
-    resources_needed = models.TextField()
 
     def __str__(self):
-        return f"ESI Level {self.esi_level} assigned by {self.assigned_by}"
+        return f"ESI Level {self.esi_level}."
