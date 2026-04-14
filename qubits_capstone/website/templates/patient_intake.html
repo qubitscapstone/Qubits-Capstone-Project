@@ -9,174 +9,177 @@
     <!-- Only allow new patient intake if user is logged in -->
     {% if user.is_authenticated %}
 
-        <!-- Patient Info -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
-            Patient Info
-        </button>
-        <div class="modal fade" id="patient-info-modal" data-bs-backdrop="static" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Patient Intake</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="{% url 'patient_intake' %}" method="post">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            {{ patient_form.as_p }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="patient_submit" class="btn btn-primary">Save changes</button>
-                            <!-- <button type="button" class="btn btn-success"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#high-risk-modal"
-                                    data-bs-dismiss="modal">
-                                Next
-                            </button> -->
-                        </div>
-                    </form>
+    <!-- Patient Info -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
+        Add Patient
+    </button>
+    <div class="modal fade" id="patient-info-modal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Patient Intake</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="{% url 'patient_intake' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ patient_form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="patient_submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
-        </div>
-        <!-- High Risk Situations -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#high-risk-modal">
-            High Risk
-        </button>
-        <div class="modal fade" id="high-risk-modal" data-bs-backdrop="static" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">High Risk</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="{% url 'patient_intake' %}" method="post">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            {{ high_risk_form.as_p }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="high_risk_submit" class="btn btn-primary">Save changes</button>
-                            <!-- <button type="button" class="btn btn-success"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#vitals-modal"
-                                    data-bs-dismiss="modal">
-                                Next: Vitals
-                            </button> -->
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- Vitals -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vitals-modal">
-            Vitals
-        </button>
-
-        <div class="modal fade" id="vitals-modal" data-bs-backdrop="static" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Vitals</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <form action="{% url 'patient_intake' %}"  method="post">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            {{ vitals_form.as_p }}
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="vitals_submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-          <!-- ESI Model -->
-         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ESI-modal">
-            ESI
-        </button>
-        <div class="modal fade" id="ESI-modal" data-bs-backdrop="static" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">ESI Output</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                </div>
-
-                <div class="modal-body">
-                <!-- loading screen -->
-                 <div id="loading" class="text-center">
-                    <div class="spinner-border text-light" role="status"></div>
-                    <p class="mt-2 text-light">Loading...</p>
-                 </div>
-                 <!-- Result -->
-                  {% if show_result %}
-                <div id="esi-result">
-                    
-                <!-- ESI Color -->
-                <p class="text-muted mb-1">ESI Level</p>
-                 <span class="badge fs-4
-                     {% if esi_score == 1 %}bg-danger
-                     {% elif esi_score == 2 %}bg-warning text-dark
-                     {% elif esi_score == 3 %}bg-info text-dark
-                     {% elif esi_score == 4 %}bg-primary
-                     {% else %}bg-success
-                     {% endif %}">
-                 Level {{ esi_score }}
-             </span>
-
-                  <!-- ESI Description -->
-               <p class="mt-3 fw-semibold">
-                    {% if esi_score == 1 %}Most Urgent
-                    {% elif esi_score == 2 %}High Urgency 
-                    {% elif esi_score == 3 %}Low Urgency
-                    {% elif esi_score == 4 %}Least Urgent
-                    {% else %}Non Urgent 
-                    {% endif %}
-                 </p>
-
-                </div>
-                {% endif %}
         </div>
     </div>
-</div>
-              
+    <!-- High Risk Situations -->
+    {% if open_high_risk %}
+    <div class="modal fade" id="high-risk-modal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">High Risk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'patient_intake' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ high_risk_form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="high_risk_submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- open the modal -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new bootstrap.Modal(document.getElementById('high-risk-modal')).show();
+        });
+    </script>
+    {% endif %}
+    <!-- Vitals -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vitals-modal">
+            Vitals
+        </button> -->
+    {% if open_vitals %}
+    <div class="modal fade" id="vitals-modal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vitals</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-        <!-- Icon found at https://www.flaticon.com/free-icons/exit" -->
-         <!-- Patient Left -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paitient-exit-modal">
-            <!-- Exit icon created by Freepik https://www.flaticon.com/free-icons/exit -->
-            <img src="/static/images/exit.png" class="invert" alt="exit button">
-        </button>
-         <div class="modal fade" id="paitient-exit-modal" data-bs-backdrop="static" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Patient exited</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <form action="{% url 'patient_intake' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ vitals_form.as_p }}
                     </div>
 
-                    <form action="{% url 'patient_intake' %}"  method="post">
-                        {% csrf_token %}
-                        <div class="modal-body">
-                            {{ patient_left_form.as_p }}
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="vitals_submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- show ESI modal -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new bootstrap.Modal(document.getElementById('vitals-modal')).show();
+        });
+    </script>
+    {% endif %}
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="patient_left_submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
+    {% if open_ESI_output %}
+    <!-- ESI Model -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ESI-modal">
+                ESI
+            </button> -->
+    <div class="modal fade" id="ESI-modal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ESI Output</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- loading screen -->
+                    <div id="loading" class="text-center">
+                        <div class="spinner-border text-light" role="status"></div>
+                        <p class="mt-2 text-light">Loading...</p>
+                    </div>
+                    <!-- Result -->
+                    <div id="esi-result">
+                        <!-- ESI Color -->
+                        <p class="text-muted mb-1">ESI Level</p>
+                        <span class="badge fs-4
+                            {% if esi_score == 1 %} bg-danger
+                            {% elif esi_score == 2 %} bg-warning text-dark
+                            {% elif esi_score == 3 %} bg-info text-dark
+                            {% elif esi_score == 4 %} bg-primary
+                            {% else %} bg-success
+                            {% endif %}">
+                            Level {{ ESI_score }}
+                        </span>
+
+                        <!-- ESI Description -->
+                        <p class="mt-3 fw-semibold">
+                            {% if ESI_score == 1 %}Most Urgent
+                            {% elif ESI_score == 2 %}High Urgency
+                            {% elif ESI_score == 3 %}Low Urgency
+                            {% elif ESI_score == 4 %}Least Urgent
+                            {% else %}Non Urgent
+                            {% endif %}
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- show ESI modal -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new bootstrap.Modal(document.getElementById('ESI-modal')).show();
+        });
+    </script>
     {% endif %}
+
+    <!-- Icon found at https://www.flaticon.com/free-icons/exit" -->
+    <!-- Patient Left -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paitient-exit-modal">
+        <!-- Exit icon created by Freepik https://www.flaticon.com/free-icons/exit -->
+        <img src="/static/images/exit.png" class="invert" alt="exit button">
+    </button>
+    <div class="modal fade" id="paitient-exit-modal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Patient exited</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form action="{% url 'patient_intake' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ patient_left_form.as_p }}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="patient_left_submit" class="btn btn-primary">Save
+                            changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- All Current Patients -->
     <table class="table">
         <thead>
@@ -185,20 +188,20 @@
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
                 <th scope="col">Arrival Time</th>
-                <!-- <th scope="col">ESI Level</th> -->
+                <th scope="col">ESI Level</th>
             </tr>
         </thead>
         <tbody>
-            {% for visit in all_visits %}
-                {% if not visit.exiting_time %}
-                    <tr>
-                        <th scope="row">{{ visit.patient_id.patient_id }}</th>
-                        <td>{{ visit.patient_id.first_name }}</td>
-                        <td>{{ visit.patient_id.last_name }}</td>
-                        <td>{{ visit.arrival_time }}</td>
-                        <!-- <td>Null</td> -->
-                    </tr>
-                {% endif %}
+            {% for assessment in all_assessments %}
+            {% if not assessment.vitals.visit.exiting_time %}
+            <tr>
+                <th scope="row">{{ assessment.vitals_id.visit_id.patient_id.patient_id }}</th>
+                <td>{{ assessment.vitals_id.visit_id.patient_id.first_name }}</td>
+                <td>{{ assessment.vitals_id.visit_id.patient_id.last_name }}</td>
+                <td>{{ assessment.vitals_id.visit_id.arrival_time }}</td>
+                <td>{{ assessment.esi_level }}</td>
+            </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

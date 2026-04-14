@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
-from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm
+from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShift, AddStaffToShift
 from django.contrib import messages
-from scripts.esi_calculation import calculate_esi
 from .webapp_scripts.esi_logic import get_esi_for_vital_id
 
 
@@ -13,9 +12,29 @@ def home(request):
 
 @login_required
 def patient_intake(request):
-    all_visits = website.models.Visit.objects.all()
+    
+    # gather data needed for all requests 
+    all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
+
+    patient_form = PatientForm()
+    high_risk_form = HighRiskForm()
+    vitals_form = VitalsForm()
+    patient_left_form = PatientLeftForm()
+
+    context = {
+        "all_assessments": all_assessments,
+        "patient_form": patient_form,
+        "high_risk_form": high_risk_form,
+        "vitals_form": vitals_form,
+        "patient_left_form" : patient_left_form, 
+        "ESI_score" : None,
+        "open_high_risk" : False,
+        "open_vitals" : False,
+        "open_ESI_output" : False
+    }   
 
     if request.method == "POST":
+
         if "patient_submit" in request.POST:
             patient_form = PatientForm(request.POST)
             if patient_form.is_valid():
@@ -26,6 +45,9 @@ def patient_intake(request):
 
                 # save the visit id created to use in vitals creation
                 request.session['current_visit_id'] = visit.visit_id
+
+                # open the high risk modal
+                context["open_high_risk"] = True
 
             else:
                 print(patient_form.errors)
@@ -46,6 +68,9 @@ def patient_intake(request):
                 request.session['disoriented'] = high_risk_form.cleaned_data["disoriented"]
                 request.session['severe_pain'] = high_risk_form.cleaned_data["severe_pain"]
                 request.session['diff_resources'] = high_risk_form.cleaned_data["diff_resources"]
+
+                # open vitals modal
+                context["open_vitals"] = True
 
             else:
                 print(high_risk_form.errors)
@@ -72,15 +97,15 @@ def patient_intake(request):
                 curr_vitals.save()
 
                 # get the score if they manually entered it
-                esi_score = vitals_form.cleaned_data.get("esi_override")
+                context["ESI_score"] = vitals_form.cleaned_data.get("esi_override")
 
                 #TO DO: Get ESI script data to the database and front end
                 # # if no override, calculate using script
-                if not esi_score:
-                    esi_score = get_esi_for_vital_id(curr_vitals.Vitals_id)
+                if not context["ESI_score"]:
+                    context["ESI_score"] = get_esi_for_vital_id(curr_vitals.Vitals_id)
 
                 # save ESI score in DB
-                website.models.TriageAssessment.objects.create(visit_id=current_visit, esi_level = esi_score)
+                website.models.TriageAssessment.objects.create(vitals_id=curr_vitals, esi_level = context["ESI_score"])
 
                 # after everything has saved, remove saved session values to avoid errors in later entries
                 request.session.pop('current_visit_id', None)    
@@ -89,6 +114,9 @@ def patient_intake(request):
                 request.session.pop('disoriented', None) 
                 request.session.pop('severe_pain', None) 
                 request.session.pop('diff_resources', None) 
+
+                # open the ESI output modal
+                context["open_ESI_output"] = True
 
             else:
                 print(vitals_form.errors)
@@ -111,19 +139,6 @@ def patient_intake(request):
             else:
                 print(patient_left_form.errors)
 
-    patient_form = PatientForm()
-    high_risk_form = HighRiskForm()
-    vitals_form = VitalsForm()
-    patient_left_form = PatientLeftForm()
-
-    context = {
-        "all_visits": all_visits,
-        "patient_form": patient_form,
-        "high_risk_form": high_risk_form,
-        "vitals_form": vitals_form,
-        "patient_left_form" : patient_left_form, 
-        # "ESI_result" : esi_score
-    }
     return render(request, "patient_intake.html", context)
 
 @login_required
