@@ -141,10 +141,84 @@ def patient_intake(request):
 
     return render(request, "patient_intake.html", context)
 
+
 @login_required
 def shift(request):
-
-    return render(request, "shift.html")
+    # Load all nurses (filter by role or whatever identifies nurses in your Staff model)
+    all_nurses = website.models.Staff.objects.filter(title='nurse')  # Adjust filter to match  model
+    
+    # Load all staff members (for shift dropdowns)
+    all_staff = website.models.Staff.objects.all()
+    
+    # Initialize empty forms (will be populated on POST or used in template)
+    switch_shift_form = SwitchShiftForm()
+    add_staff_form = AddStaffToShiftForm()
+    
+    # Base context with data for template rendering
+    context = {
+        "all_nurses": all_nurses,           # List of nurses for display/dropdowns
+        "all_staff": all_staff,             # All staff for shift management
+        "switch_shift_form": switch_shift_form,  # Form for changing shifts
+        "add_staff_form": add_staff_form,   # Form for adding staff to shifts
+        "open_switch_modal": False,         # Controls if switch modal auto-opens
+        "open_add_staff_modal": False,      # Controls if add staff modal auto-opens
+        "message": None                     # Success/error messages
+    }
+    
+    # Handle form submissions (exact same pattern as patient_intake)
+    if request.method == "POST":
+        
+        # CASE 1: User clicked "Switch Shift" button in modal
+        if "switch_shift_submit" in request.POST:
+            # Re-create form with POST data for validation
+            switch_shift_form = SwitchShiftForm(request.POST)
+            
+            # Validate form data (handles field validation, required fields)
+            if switch_shift_form.is_valid():
+                # Extract cleaned data (safe, validated values)
+                staff_id = switch_shift_form.cleaned_data['staff_id']
+                new_shift = switch_shift_form.cleaned_data['active_shift']  # A,B,C,D
+                
+                # Safely get staff record by ID (like patient_left_form)
+                try:
+                    staff = website.models.Staff.objects.get(id=staff_id)
+                    
+                    # Update only the shift field (efficient, no full save)
+                    staff.active_shift = new_shift
+                    staff.save(update_fields=['active_shift'])
+                    
+                    # Success message (shows in template)
+                    context["message"] = "Shift updated successfully!"
+                    
+                    # Reset form for next use
+                    switch_shift_form = SwitchShiftForm()
+                    
+                except website.models.Staff.DoesNotExist:
+                    # Handle case where staff ID doesn't exist
+                    context["message"] = "Staff not found."
+            else:
+                # Form errors (invalid shift choice, missing staff_id, etc.)
+                print(switch_shift_form.errors)  
+                
+        # CASE 2: User clicked "Add Staff to Shift" button  
+        elif "add_staff_submit" in request.POST:
+            # Re-create form with POST data
+            add_staff_form = AddStaffToShiftForm(request.POST)
+            
+            if add_staff_form.is_valid():
+                # Save creates/updates the record (adjust based on your form's model)
+                add_staff_form.save()
+                
+                # Success feedback
+                context["message"] = "Staff added to shift!"
+                
+                # Reset form
+                add_staff_form = AddStaffToShiftForm()
+            else:
+                print(add_staff_form.errors)  # Debug form errors
+                
+    # render shift.html with updated context
+    return render(request, "shift.html", context)
 
 @login_required
 def nurse_workload(request):
