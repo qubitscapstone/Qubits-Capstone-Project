@@ -4,11 +4,11 @@
 
 {% block content %}
     <p>shift page</p>
-    { % for shift in all_shifts % }
-        {% if shift.ctive == True %}
+    <!-- { % for shift in all_shifts % }
+        {% if shift.active == True %}
             <p>The active shift is: {{shift.shift_name}}</p>
-        {{endif}}
-    {{endfor}}
+        {{% endif %}}
+    {{% endfor %}}
     <h3>Staff on active shift:</h3>
     <table class="table">
         <thead>
@@ -31,5 +31,5 @@
                 {% endif %}
             {% endfor %}
         </tbody>
-    </table>
+    </table> -->
 {% endblock %}

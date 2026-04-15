@@ -130,7 +130,7 @@ class PatientLeftForm(forms.Form):
         widget = forms.NumberInput(attrs={"class": "form-control"})
     )
 
-class SwitchShift(forms.Form):
+class SwitchShiftForm(forms.Form):
     current_shift = forms.ChoiceField(
         label = "Please select the current shift",
         choices = [('A', "A"),
@@ -139,9 +139,12 @@ class SwitchShift(forms.Form):
                    ('D', "D")],
         widget = forms.Select(attrs={"class": "form-select"})
     )
-class AddStaffToShift(forms.Form):
+class AddStaffToShiftForm(forms.Form):
     staff_to_add = forms.ModelChoiceField(
         label = "Please select a staff member to add to this shift",
         queryset = Staff.objects.all(), 
         widget = forms.Select(attrs={"class": "form-select"})
     )
+
+class AddPatientForm(forms.Form):
+    pass

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
-from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShift, AddStaffToShift
+from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShiftForm, AddStaffToShiftForm, AddPatientForm
 from django.contrib import messages
 from .webapp_scripts.esi_logic import get_esi_for_vital_id
 
@@ -143,8 +143,17 @@ def patient_intake(request):
 
 @login_required
 def shift(request):
+
     return render(request, "shift.html")
 
 @login_required
 def nurse_workload(request):
-    return render(request, "nurse_workload.html")
+    all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
+    all_staff = website.models.Staff.objects.all()
+    add_patient_form = AddPatientForm()
+    context = {
+        "all_assessments": all_assessments,
+        "all_staff": all_staff, 
+        "add_patient_form": add_patient_form
+    } 
+    return render(request, "nurse_workload.html", context)
