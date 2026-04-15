@@ -3,5 +3,33 @@
 {% block title %}Shift{% endblock %}
 
 {% block content %}
-<p>shift page</p>
+    <p>shift page</p>
+    { % for shift in all_shifts % }
+        {% if shift.ctive == True %}
+            <p>The active shift is: {{shift.shift_name}}</p>
+        {{endif}}
+    {{endfor}}
+    <h3>Staff on active shift:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in all_staff %}
+                {% if staff.shift_id.active == True %}
+                    <tr>
+                        <th scope="row">{{ staff.staff_id }}</th>
+                        <td>{{ staff.first_name }}</td>
+                        <td>{{ staff.last_name }}</td>
+                        <td>{{ staff.title }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
