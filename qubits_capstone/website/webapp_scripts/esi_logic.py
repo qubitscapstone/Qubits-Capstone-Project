@@ -1,13 +1,19 @@
 import os
+from git import config
 import psycopg
+from decouple import config
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+DATABASE_URL=config("DATABASE_URL", cast=str)
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL is not None:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL, 
+            conn_max_age=30,
+            conn_health_checks=True)
+    }
+
 
 
 def get_esi_for_vital_id(vitals_id):
