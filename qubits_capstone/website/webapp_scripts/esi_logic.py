@@ -1,5 +1,4 @@
 import os
-from git import config
 import psycopg
 from decouple import config
 
