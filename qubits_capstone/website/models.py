@@ -25,6 +25,8 @@ class Staff(models.Model):
     #     db_column='shift_id'
     # )
 
+    # (..., null = True, blank = True) allows for those variables to be left null/empty 
+
     first_name = models.CharField(max_length=100)
 
     last_name = models.CharField(max_length=100)
@@ -40,6 +42,9 @@ class Staff(models.Model):
 
     # the current csv file only contains Dr.'s, the staff that will use this tool the most will be nurses
     title = models.CharField(max_length=50, null=True , blank= True)
+
+    currently_on_floor = models.BooleanField()
+    shift_selection = models.CharField(max_length=20, null = True, blank = True)
 
 
 

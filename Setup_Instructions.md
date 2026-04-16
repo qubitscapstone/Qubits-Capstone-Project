@@ -27,6 +27,6 @@ For later: to run the django server:
         - Run command "cd qubits_capstone"
         - Run "python manage.py runserver"
         - Ctrl + c will close the server when your done. Or kill the terminal :D
-## did this finally work?
+
 
         
