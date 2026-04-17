@@ -3,7 +3,35 @@
 {% block title %}Shift{% endblock %}
 
 {% block content %}
-    <p>shift page</p>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#shiftModal">
+    Add Shift
+</button>
+
+<div class="modal fade" id="shiftModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Add Shift</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form method="POST" action="{% url 'shift' %}">
+          {% csrf_token %}
+
+          {{ switch_shift_form.as_p }}
+
+          <button type="submit" name="switch_shift_submit" class="btn btn-success">
+            Save Shift
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+   
     <!-- { % for shift in all_shifts % }
         {% if shift.active == True %}
             <p>The active shift is: {{shift.shift_name}}</p>
