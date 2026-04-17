@@ -43,10 +43,7 @@ class Staff(models.Model):
     # the current csv file only contains Dr.'s, the staff that will use this tool the most will be nurses
     title = models.CharField(max_length=50, null=True , blank= True)
 
-    currently_on_floor = models.BooleanField()
-    shift_selection = models.CharField(max_length=20, null = True, blank = True)
-
-
+   
 
     def __str__(self):
          return f"{self.first_name[0]},{self.last_name}, {self.title}"
