@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +8,10 @@
 
     <title>{% block title %}Qubits Capstone Project{% endblock %}</title>
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS and JavaScript -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet", href="{% static 'css/styles.css'%}">
+    <script src="{% static 'js/script.js' %}" defer></script>
 </head>
 
 <body>
@@ -16,7 +20,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">ER Triage</a>
-            <!-- https://getbootstrap.com/docs/5.3/components/navbar/#nav -->
+            <!--  https://getbootstrap.com/docs/5.3/components/navbar/#nav  -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" 
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +35,21 @@
             </div>
         </div>
 
-    </nav>
+    </nav> 
+
+    <!-- 
+<header>
+    <nav class="navbar">
+        <a href="#" class="nav-logo">
+        <h2 class="logo" > ⚕️QUBITS </h2>
+            <a class="nav-link" href="{% url 'home' %}">Home</a>
+            <a class="nav-link" href="{% url 'patient_intake' %}">Patient Intake</a>
+            <a class="nav-link" href="{% url 'shift' %}">Shift Info</a>
+            <a class="nav-link" href="{% url 'nurse_workload' %}">Nurse Workload</a>
+        </a>
+    </nav>    
+</header>
+-->
     <!-- Messages -->
     {% for message in messages %}
         <div class="container-fluid p-0">
