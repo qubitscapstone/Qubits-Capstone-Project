@@ -9,6 +9,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 #str___self determines how it is displayed
 
 #------------------------Shift Information------------------------
+class Shift(models.Model):
+
+    shift_id = models.AutoField(primary_key=True)
+
+    shift_name = models.CharField(max_length=6, choices=(('A','a'),('B', 'b'),('C','c')), null=True, blank=True)
+
+    active = models.BooleanField()
+    
+    def __str__(self):
+         return f"{self.shift_name},{self.active}"
+
 
 
 #------------------------STAFF Information------------------------
