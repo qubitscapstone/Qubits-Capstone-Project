@@ -148,3 +148,10 @@ class AddStaffToShiftForm(forms.Form):
 
 class AddPatientForm(forms.Form):
     pass
+
+class AssignNursetoPatient(forms.Form):
+    staff_to_add = forms.ModelChoiceField(
+        label = "select a nurse to assign to this patient",
+        queryset = Staff.objects.all(), 
+        widget = forms.Select(attrs={"class": "form-select"})
+    )
