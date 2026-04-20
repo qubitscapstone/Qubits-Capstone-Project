@@ -1,0 +1,31 @@
+body{
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+
+}
+
+nav{
+   background: rgb(222, 222, 222);
+   width: 100%;
+   padding: 10px;
+}
+
+.img {
+   background: url(/static/images/ER_1.jpg);
+   height: 100vh;
+   width: 100%;
+   background-position: center;
+   background-size: cover;
+   position: relative;
+}
+
+.center{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   text-align: center;
+   color: aliceblue;
+   
+}
