@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
@@ -203,7 +205,7 @@ def shift(request):
                 new_active.save()
                 context["active_shift"] = new_active
 
-                # Success feedback
+                # Succpatientess feedback
                 context["message"] = "Shift updated successfully!"
                 
                 # Reset form
@@ -235,8 +237,33 @@ def nurse_workload(request):
 
     # TODO Assign nurse to patient (link staff_id to nurse on patient and increment number_of_patients on nurse)
     # and delete patient from workload (add exit time to patient & set nurse to null)
-    if "add_patient_submit" in request.POST: 
-        # the patient id for the row the modal was opened on
-        patient_id = request.POST.get("patient_id")
-    
+    if "add_patient_submit" in request.POST:
+      patient_id = request.POST.get("patient_id")
+      nurse_id = request.POST.get("nurse_id")
+
+      patient = website.models.Patient.objects.get(patient_id=patient_id)
+      nurse = website.models.Staff.objects.get(staff_id=nurse_id)
+
+      patient.nurse = nurse
+      patient.save(update_fields=["nurse"])
+
+      nurse.number_of_patients = (nurse.number_of_patients or 0) + 1
+      nurse.save(update_fields=["number_of_patients"])
+
+    elif "patient_exited_submit" in request.POST:
+      patient_id = request.POST.get("patient_id")
+      patient = website.models.Patient.objects.get(patient_id=patient_id)
+
+      if patient.nurse:
+        nurse = patient.nurse
+        nurse.number_of_patients = max((nurse.number_of_patients or 1) - 1, 0)
+        nurse.save(update_fields=["number_of_patients"])
+
+    current_visit = website.models.Visit.objects.filter(patient_id=patient).order_by("-visit_id").first()
+    if current_visit:
+        current_visit.exiting_time = timezone.now()
+        current_visit.save(update_fields=["exiting_time"])
+
+    patient.nurse = None
+    patient.save(update_fields=["nurse"])
     return render(request, "nurse_workload.html", context)
