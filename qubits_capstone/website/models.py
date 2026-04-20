@@ -29,12 +29,13 @@ class Staff(models.Model):
     # staff general information 
     staff_id = models.AutoField(primary_key=True)
     
-    # uncomment after shift model is done 
-    # shift_id = models.ForeignKey(
-    #     'Shift', 
-    #     related_name='shift',
-    #     db_column='shift_id'
-    # )
+    shift_id = models.ForeignKey(
+        'Shift', 
+        related_name='shift',
+        db_column='shift_id', 
+        on_delete=models.PROTECT, 
+        default=2
+    )
 
     # (..., null = True, blank = True) allows for those variables to be left null/empty 
 
