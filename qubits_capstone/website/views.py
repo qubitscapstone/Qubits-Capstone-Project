@@ -229,7 +229,8 @@ def nurse_workload(request):
     } 
 
 
-    # TODO Assign nurse to patient and delete patient from workload (add exit time to patient & set nurse to null)
+    # TODO Assign nurse to patient (link staff_id to nurse on patient and increment number_of_patients on nurse)
+    # and delete patient from workload (add exit time to patient & set nurse to null)
     if "add_patient_submit" in request.POST: 
         # the patient id for the row the modal was opened on
         patient_id = request.POST.get("patient_id")
