@@ -154,5 +154,9 @@ class AssignNursetoPatientForm(forms.Form):
     )
 
 class PatientExitedForm(forms.Form):
-    # Melanie's
-    pass
+
+    patient_id = forms.ModelChoiceFIeld(
+        label = "Please select patient you would like to remove from this shift",
+        queryset = Staff.objects.filter(shift_id_active = True),
+        widget = forms.Select(attrs= {"class": "form-select"}) 
+    )
