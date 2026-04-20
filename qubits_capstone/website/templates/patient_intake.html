@@ -4,13 +4,13 @@
 
 {% block content %}
 <div class="text-center">
-    <p class="display-4">Patient Intake</p>
+    <p class="display-5">Patient Intake</p>
 
     <!-- Only allow new patient intake if user is logged in -->
     {% if user.is_authenticated %}
 
     <!-- Patient Info -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#patient-info-modal">
         Add Patient
     </button>
     <div class="modal fade" id="patient-info-modal" data-bs-backdrop="static" tabindex="-1">
@@ -151,9 +151,9 @@
 
     <!-- Icon found at https://www.flaticon.com/free-icons/exit" -->
     <!-- Patient Left -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paitient-exit-modal">
-        <!-- Exit icon created by Freepik https://www.flaticon.com/free-icons/exit -->
-        <img src="/static/images/exit.png" class="invert" alt="exit button">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#paitient-exit-modal">
+        <!-- Exit icon created by meaicon https://www.flaticon.com/free-icon/exit_16784358 -->
+        <img src="/static/images/exit_white.png" class="invert" alt="exit button">
     </button>
     <div class="modal fade" id="paitient-exit-modal" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog">

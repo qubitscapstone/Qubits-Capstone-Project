@@ -3,9 +3,10 @@
 {% block title %}Nurse Workload{% endblock %}
 
 {% block content %}
-    <p>nurse workload page</p>
+<div class="text-center">
+    <p class="display-5">Nurse Workload</p>
     <!-- Show Staff -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#show-staff-modal">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#show-staff-modal">
         Show Active Staff
     </button>
     <div class="modal fade" id="show-staff-modal" data-bs-backdrop="static" tabindex="-1">
@@ -43,7 +44,7 @@
             </div>
         </div>
     </div>
-
+    <!-- add form  -->
      <!-- All Current Patients -->
     <table class="table">
         <thead>
@@ -53,7 +54,8 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">Arrival Time</th>
                 <th scope="col">ESI Level</th>
-                <th sscope="col">Add Patient</th>
+                <th scope="col">Add Patient</th>
+                <th scope="col">Delete Patient</th>
             </tr>
         </thead>
         <tbody>
@@ -66,8 +68,14 @@
                         <td>{{ assessment.vitals_id.visit_id.arrival_time }}</td>
                         <td>{{ assessment.esi_level }}</td>
                         <td>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-patient-modal">
+                            <button type="submit" name="id-button" lass="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-patient-modal">
                                 Add Patient
+                            </button>
+                        </td>
+                        <td>
+                            <button type="submit" name="delete-button" lass="btn btn-primary" value="{{assessment.vitals_id.visit_id.patient_id.patient_id}}">
+                                <!-- Exit icon created by meaicon https://www.flaticon.com/free-icon/exit_16784358 -->
+                                <img src="/static/images/exit_black.png" class="invert" alt="exit button">
                             </button>
                         </td>
                     </tr>
