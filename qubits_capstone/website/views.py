@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
-from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShiftForm, AddStaffToShiftForm, AddPatientForm
+from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShiftForm, AddStaffToShiftForm, AssignNursetoPatient
 from django.contrib import messages
 from .webapp_scripts.esi_logic import get_esi_for_vital_id
 
@@ -144,78 +144,79 @@ def patient_intake(request):
 
 @login_required
 def shift(request):
-    # Load all nurses (filter by role or whatever identifies nurses in your Staff model)
-    all_nurses = website.models.Staff.objects.filter(title='nurse')  # Adjust filter to match  model
-    
     # Load all staff members (for shift dropdowns)
     all_staff = website.models.Staff.objects.all()
+    active_shift = website.models.Shift.objects.get(active=True)
     
     # Initialize empty forms (will be populated on POST or used in template)
     switch_shift_form = SwitchShiftForm()
     add_staff_form = AddStaffToShiftForm()
     
     # Base context with data for template rendering
-    context = {
-        "all_nurses": all_nurses,           # List of nurses for display/dropdowns
+    context = {          # List of nurses for display/dropdowns
         "all_staff": all_staff,             # All staff for shift management
+        "active_shift": active_shift,
         "switch_shift_form": switch_shift_form,  # Form for changing shifts
         "add_staff_form": add_staff_form,   # Form for adding staff to shifts
-        "open_switch_modal": False,         # Controls if switch modal auto-opens
-        "open_add_staff_modal": False,      # Controls if add staff modal auto-opens
         "message": None                     # Success/error messages
     }
     
     # Handle form submissions (exact same pattern as patient_intake)
     if request.method == "POST":
         
-        # CASE 1: User clicked "Switch Shift" button in modal
-        if "switch_shift_submit" in request.POST:
+        # CASE 1: User clicked save in "Add staff to shift"
+        if "add_staff_submit" in request.POST:
             # Re-create form with POST data for validation
-            switch_shift_form = SwitchShiftForm(request.POST)
+            add_staff_form = AddStaffToShiftForm(request.POST)
             
             # Validate form data (handles field validation, required fields)
-            if switch_shift_form.is_valid():
+            if add_staff_form.is_valid():
                 # Extract cleaned data (safe, validated values)
-                staff_id = switch_shift_form.cleaned_data['staff_id']
-                new_shift = switch_shift_form.cleaned_data['active_shift']  # A,B,C,D
+                staff = add_staff_form.cleaned_data['staff_to_add']
                 
                 # Safely get staff record by ID (like patient_left_form)
-                try:
-                    staff = website.models.Staff.objects.get(id=staff_id)
-                    
-                    # Update only the shift field (efficient, no full save)
-                    staff.active_shift = new_shift
-                    staff.save(update_fields=['active_shift'])
+                try: 
+                    staff.shift_id = active_shift
+                    staff.save()
                     
                     # Success message (shows in template)
-                    context["message"] = "Shift updated successfully!"
+                    context["message"] = "Staff added to shift!"
                     
                     # Reset form for next use
-                    switch_shift_form = SwitchShiftForm()
+                    add_staff_form = SwitchShiftForm()
                     
                 except website.models.Staff.DoesNotExist:
                     # Handle case where staff ID doesn't exist
                     context["message"] = "Staff not found."
             else:
                 # Form errors (invalid shift choice, missing staff_id, etc.)
-                print(switch_shift_form.errors)  
+                print(add_staff_form.errors)  
                 
-        # CASE 2: User clicked "Add Staff to Shift" button  
-        elif "add_staff_submit" in request.POST:
+        # CASE 2: User clicked "switch shift" button  
+        elif "switch_shift_submit" in request.POST:
             # Re-create form with POST data
-            add_staff_form = AddStaffToShiftForm(request.POST)
+            switch_shift_form = SwitchShiftForm(request.POST)
             
-            if add_staff_form.is_valid():
-                # Save creates/updates the record (adjust based on your form's model)
-                add_staff_form.save()
+            if switch_shift_form.is_valid():
+                new_active_id = switch_shift_form.cleaned_data['new_shift']
                 
+                # set old shift to not active anymore
+                active_shift.active = False;
+                active_shift.save()
+
+                # set new active shift
+                new_active = website.models.Shift.objects.get(shift_id=new_active_id)
+                new_active.active = True
+                new_active.save()
+                context["active_shift"] = new_active
+
                 # Success feedback
-                context["message"] = "Staff added to shift!"
+                context["message"] = "Shift updated successfully!"
                 
                 # Reset form
-                add_staff_form = AddStaffToShiftForm()
+                add_staff_form = SwitchShiftForm()
             else:
-                print(add_staff_form.errors)  # Debug form errors
+                print(add_staff_form.errors) 
                 
     # render shift.html with updated context
     return render(request, "shift.html", context)
@@ -224,10 +225,10 @@ def shift(request):
 def nurse_workload(request):
     all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
     all_staff = website.models.Staff.objects.all()
-    add_patient_form = AddPatientForm()
+    assign_patient = AssignNursetoPatient()
     context = {
         "all_assessments": all_assessments,
         "all_staff": all_staff, 
-        "add_patient_form": add_patient_form
+        "assign_patient": assign_patient
     } 
     return render(request, "nurse_workload.html", context)

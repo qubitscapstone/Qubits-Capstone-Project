@@ -41,7 +41,7 @@ class Staff(models.Model):
     email = models.CharField(max_length= 100, null= True, blank = True)
    
     def __str__(self):
-         return f"{self.first_name[0]},{self.last_name}, {self.title}"
+         return f"{self.first_name} {self.last_name}"
 
 #-----------------------------------Patient Information----------------------------
 
@@ -64,7 +64,7 @@ class Patient(models.Model):
                               null=True,
                               blank=True)
     def __str__(self):
-        return f"{self.get_full_name()}\n\tAssigned Dr: {self.doctor}\n\tAssigned Nurse: {self.nurse}"   
+        return f"{self.get_full_name()}\n\tAssigned Nurse: {self.nurse}"   
 
 #------------------------------------Visit Model-----------------------------
 class Visit(models.Model):

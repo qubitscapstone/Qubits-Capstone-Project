@@ -5,11 +5,40 @@
 {% block content %}
 <div class="text-center">
     <p class="display-5">Shift Info</p>
-    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#shiftModal">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#switch_shift_modal">
+        Switch shifts
+    </button>
+
+    <div class="modal fade" id="switch_shift_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Switch shifts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'shift' %}">
+                        {% csrf_token %}
+
+                        {{ switch_shift_form.as_p }}
+
+                        <button type="submit" name="switch_shift_submit" class="btn btn-success">
+                            Save
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#add_shift_modal">
         Add staff to this shift
     </button>
 
-    <div class="modal fade" id="shiftModal" tabindex="-1">
+    <div class="modal fade" id="add_shift_modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -22,10 +51,10 @@
                     <form method="POST" action="{% url 'shift' %}">
                         {% csrf_token %}
 
-                        {{ switch_shift_form.as_p }}
+                        {{ add_staff_form.as_p }}
 
-                        <button type="submit" name="switch_shift_submit" class="btn btn-success">
-                            Save Shift
+                        <button type="submit" name="add_staff_submit" class="btn btn-success">
+                            Save
                         </button>
                     </form>
                 </div>
@@ -33,30 +62,24 @@
             </div>
         </div>
     </div>
-
-    {% for shift in all_shifts %}
-    {% if shift.active == True %}
-    <p>The active shift is: {{shift.shift_name}}</p>
-    {% endif %}
-    {% endfor %}
-    <h3 class="text-start fw-light">Staff on active shift:</h3>
+    <h3 class="text-start fw-light">Staff on {{active_shift.shift_name}} shift:</h3>
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">ID</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
-                <th scope="col">Title</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone Number</th>
             </tr>
         </thead>
         <tbody>
             {% for staff in all_staff %}
             {% if staff.shift_id.active == True %}
             <tr>
-                <th scope="row">{{ staff.staff_id }}</th>
                 <td>{{ staff.first_name }}</td>
                 <td>{{ staff.last_name }}</td>
-                <td>{{ staff.title }}</td>
+                <td>{{ staff.email }}</td>
+                <td>{{ staff.phone_number }}</td>
             </tr>
             {% endif %}
             {% endfor %}
