@@ -39,9 +39,14 @@ class Staff(models.Model):
     phone_number = models.CharField(max_length=15)  
 
     email = models.CharField(max_length= 100, null= True, blank = True)
+
+    number_of_patients = models.IntegerField(default=0)
    
     def __str__(self):
-         return f"{self.first_name} {self.last_name}"
+        if self.number_of_patients > 0:
+            return f"{self.first_name} {self.last_name} ({self.number_of_patients} patients)" 
+        else:
+            return f"{self.first_name} {self.last_name}"
 
 #-----------------------------------Patient Information----------------------------
 

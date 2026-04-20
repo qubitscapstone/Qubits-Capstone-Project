@@ -1,5 +1,5 @@
 from django import forms
-from .models import Patient, Vitals, Staff
+from .models import Patient, Vitals, Staff, Shift
 
 class PatientForm(forms.ModelForm):
     class Meta:
@@ -146,9 +146,13 @@ class AddStaffToShiftForm(forms.Form):
         widget = forms.Select(attrs={"class": "form-select"})
     )
 
-class AssignNursetoPatient(forms.Form):
+class AssignNursetoPatientForm(forms.Form):
     staff_to_add = forms.ModelChoiceField(
-        label = "select a nurse to assign to this patient",
-        queryset = Staff.objects.all(), 
+        label = "Select a nurse to assign to this patient",
+        queryset = Staff.objects.filter(shift_id__active=True), 
         widget = forms.Select(attrs={"class": "form-select"})
     )
+
+class PatientExitedForm(forms.Form):
+    # Melanie's
+    pass

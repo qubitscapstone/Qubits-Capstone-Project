@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
-from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShiftForm, AddStaffToShiftForm, AssignNursetoPatient
+from .forms import PatientForm, VitalsForm, HighRiskForm, PatientLeftForm, SwitchShiftForm, AddStaffToShiftForm, AssignNursetoPatientForm, PatientExitedForm
 from django.contrib import messages
 from .webapp_scripts.esi_logic import get_esi_for_vital_id
 
@@ -13,7 +13,7 @@ def home(request):
 @login_required
 def patient_intake(request):
     
-    # gather data needed for all requests 
+    # New patients at the top
     all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
 
     patient_form = PatientForm()
@@ -55,12 +55,6 @@ def patient_intake(request):
         elif "high_risk_submit" in request.POST:
             high_risk_form = HighRiskForm(request.POST)
             if high_risk_form.is_valid():
-
-                # get visit and save the complaint to it
-                # visit_primary_key = request.session.get("current_visit_id")
-                # visit = website.models.Visit.objects.get(visit_id=visit_primary_key)
-                # visit.complaint = high_risk_form.cleaned_data["complaint"]
-                # visit.save()
 
                 # save in session to be used when vital is created
                 request.session['life_saving_intervention'] = high_risk_form.cleaned_data["life_saving_intervention"]
@@ -152,9 +146,8 @@ def shift(request):
     switch_shift_form = SwitchShiftForm()
     add_staff_form = AddStaffToShiftForm()
     
-    # Base context with data for template rendering
-    context = {          # List of nurses for display/dropdowns
-        "all_staff": all_staff,             # All staff for shift management
+    context = {
+        "all_staff": all_staff,             # All staff for shift 
         "active_shift": active_shift,
         "switch_shift_form": switch_shift_form,  # Form for changing shifts
         "add_staff_form": add_staff_form,   # Form for adding staff to shifts
@@ -225,10 +218,20 @@ def shift(request):
 def nurse_workload(request):
     all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
     all_staff = website.models.Staff.objects.all()
-    assign_patient = AssignNursetoPatient()
+    assign_patient_form = AssignNursetoPatientForm()
+    patient_exited_form = PatientExitedForm()
+
     context = {
         "all_assessments": all_assessments,
         "all_staff": all_staff, 
-        "assign_patient": assign_patient
+        "assign_patient_form": assign_patient_form, 
+        "patient_exited_form": patient_exited_form
     } 
+
+
+    # TODO Assign nurse to patient and delete patient from workload (add exit time to patient & set nurse to null)
+    if "add_patient_submit" in request.POST: 
+        # the patient id for the row the modal was opened on
+        patient_id = request.POST.get("patient_id")
+    
     return render(request, "nurse_workload.html", context)
