@@ -216,7 +216,11 @@ def shift(request):
 
 @login_required
 def nurse_workload(request):
-    all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
+    all_assessments = (
+        website.models.TriageAssessment.objects
+        .select_related('vitals_id__visit_id')
+        .order_by('esi_level', 'vitals_id__visit_id__arrival_time')
+    )
     all_staff = website.models.Staff.objects.all()
     assign_patient_form = AssignNursetoPatientForm()
     patient_exited_form = PatientExitedForm()
