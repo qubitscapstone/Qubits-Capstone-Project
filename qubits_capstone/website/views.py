@@ -254,7 +254,7 @@ def nurse_workload(request):
             patient.nurse = None
             patient.save(update_fields=["nurse"])
 
-            messages.success(request, "Patient has been deleted from " + new_nurse.first_name + " " + new_nurse.last_name + "'s workload.")
+            messages.success(request, "Patient has been deleted from " + patient.nurse.first_name + " " + patient.nurse.last_name + "'s workload.")
 
     all_assessments = (
         website.models.TriageAssessment.objects
