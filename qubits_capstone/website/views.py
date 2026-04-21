@@ -15,7 +15,10 @@ def home(request):
 def patient_intake(request):
     
     # New patients at the top
-    all_assessments = website.models.TriageAssessment.objects.order_by('-triage_id')
+    all_assessments = (website.models.TriageAssessment.objects
+                        .select_related('vitals_id__visit_id')
+                        .filter(vitals_id__visit_id__exiting_time__isnull=True)
+                        .order_by('-vitals_id__visit_id__arrival_time'))
 
     patient_form = PatientForm()
     high_risk_form = HighRiskForm()
