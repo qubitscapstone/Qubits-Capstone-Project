@@ -234,6 +234,7 @@ def nurse_workload(request):
 
             new_nurse.number_of_patients = (new_nurse.number_of_patients or 0) + 1
             new_nurse.save(update_fields=["number_of_patients"])
+            messages.success(request, "Patient has added to " + new_nurse.first_name + " " + new_nurse.last_name + "'s workload.")
 
     elif "patient_exited_submit" in request.POST:
         patient_exited_form = PatientExitedForm(request.POST)
@@ -252,6 +253,8 @@ def nurse_workload(request):
 
             patient.nurse = None
             patient.save(update_fields=["nurse"])
+
+            messages.success(request, "Patient has been deleted from " + new_nurse.first_name + " " + new_nurse.last_name + "'s workload.")
 
     all_assessments = (
         website.models.TriageAssessment.objects
