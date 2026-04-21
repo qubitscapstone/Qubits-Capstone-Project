@@ -154,14 +154,11 @@ class AssignNursetoPatientForm(forms.Form):
     )
 
 class PatientExitedForm(forms.Form):
-    # this is what is shown on the front end. we either need a dropdown with patients that have been assigned, or some place ot put a patient ID
-    # suggestions: either queryset = Patient.objects.filter(nurse != None)
-    # or replace whole thing with the syntax from PatientLeftForm(forms.Form):
-    patient_id = forms.ModelChoiceField(
+    patient = forms.ModelChoiceField(
         label = "Please select patient you would like to remove from this shift",
     #Using this queryset will retieve patients that have been treated and places in the drop down menu 
     # currently organizes the patients by the last name 
-        queryset = Patient.objects.filter(nurse__isnull = None).order_by('last_name')
+        queryset = Patient.objects.filter(nurse__isnull = False).order_by('last_name'),
     # if we wanted the drop down to be organized by the nurses it would be the line below
     #   queryset = Patient.objects.filter(nurse__isnull = None).order_by('nurse__last_name','nurse__first_name')
         widget = forms.Select(attrs= {"class": "form-select"}) 

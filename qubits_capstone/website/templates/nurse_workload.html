@@ -40,7 +40,36 @@
             </div>
         </div>
     </div>
+    <!-- Delete patient -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+        data-bs-target="#delete-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
+        Delete Patient
+    </button>
 
+    <div class="modal fade" id="delete-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}"
+        data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Patient</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form action="{% url 'nurse_workload' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ patient_exited_form.as_p }}
+                        <input type="hidden" name="patient_id"
+                            value="{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" name="patient_exited_submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -51,7 +80,6 @@
                 <th scope="col">ESI Level</th>
                 <th scope="col">Current Nurse</th>
                 <th scope="col">Add Patient</th>
-                <th scope="col">Delete Patient</th>
             </tr>
         </thead>
         <tbody>
@@ -64,60 +92,34 @@
                 <td>{{ assessment.vitals_id.visit_id.arrival_time }}</td>
                 <td>{{ assessment.esi_level }}</td>
                 <td>{{ assessment.vitals_id.visit_id.patient_id.nurse.first_name }} {{ assessment.vitals_id.visit_id.patient_id.nurse.last_name }}</td>
-
                 <td>
                     <button type="button" class="btn btn-dark" data-bs-toggle="modal"
                         data-bs-target="#assign-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
                         Add patient to workload
                     </button>
 
-                    <div class="modal fade" id="assign-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}" data-bs-backdrop="static" tabindex="-1">
+                    <div class="modal fade"
+                        id="assign-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}"
+                        data-bs-backdrop="static" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Add Patient to Workload</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
 
                                 <form action="{% url 'nurse_workload' %}" method="post">
                                     {% csrf_token %}
                                     <div class="modal-body">
                                         {{ assign_patient_form.as_p }}
-                                        <input type="hidden" name="patient_id" value="{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
+                                        <input type="hidden" name="patient_id"
+                                            value="{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="submit" name="add_patient_submit" class="btn btn-primary">Save</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-
-                <td>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#delete-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
-                        Delete Patient
-                    </button>
-
-                    <div class="modal fade" id="delete-patient-modal-{{ assessment.vitals_id.visit_id.patient_id.patient_id }}" data-bs-backdrop="static" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Delete Patient</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <form action="{% url 'nurse_workload' %}" method="post">
-                                    {% csrf_token %}
-                                    <div class="modal-body">
-                                        {{ patient_exited_form.as_p }}
-                                        <input type="hidden" name="patient_id" value="{{ assessment.vitals_id.visit_id.patient_id.patient_id }}">
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="submit" name="patient_exited_submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" name="add_patient_submit"
+                                            class="btn btn-primary">Save</button>
                                     </div>
                                 </form>
                             </div>

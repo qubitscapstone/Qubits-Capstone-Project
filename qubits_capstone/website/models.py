@@ -69,7 +69,7 @@ class Patient(models.Model):
                               null=True,
                               blank=True)
     def __str__(self):
-        return f"{self.get_full_name()}\n\tAssigned Nurse: {self.nurse}"   
+        return f"{self.get_full_name()}.\n\tAssigned Nurse: {self.nurse}"   
 
 #------------------------------------Visit Model-----------------------------
 class Visit(models.Model):
@@ -89,7 +89,7 @@ class Visit(models.Model):
             
 
     def __str__(self):
-        return f"Visit {self.visit_id} (Queue Before: {self.queue_count_before_processing})"
+        return f"Visit {self.visit_id})"
     
 #-----------------------------Vitals----------------------------------------
 

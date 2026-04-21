@@ -1,5 +1,4 @@
-from time import timezone
-
+from django.utils import timezone
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import website.models
@@ -218,22 +217,6 @@ def shift(request):
 
 @login_required
 def nurse_workload(request):
-    all_assessments = (
-        website.models.TriageAssessment.objects
-        .select_related('vitals_id__visit_id')
-        .order_by('esi_level', 'vitals_id__visit_id__arrival_time')
-    )
-    all_staff = website.models.Staff.objects.all()
-    assign_patient_form = AssignNursetoPatientForm()
-    patient_exited_form = PatientExitedForm()
-
-    context = {
-        "all_assessments": all_assessments,
-        "all_staff": all_staff, 
-        "assign_patient_form": assign_patient_form, 
-        "patient_exited_form": patient_exited_form
-    } 
-
     if "add_patient_submit" in request.POST:
         assign_patient_form = AssignNursetoPatientForm(request.POST)
 
@@ -253,26 +236,35 @@ def nurse_workload(request):
         patient_exited_form = PatientExitedForm(request.POST)
 
         if patient_exited_form.is_valid():
-            # passing until form and modal completion
-            pass
-            # Case 1(query set)
-            #patient = assign_patient_form.cleaned_data["patient"]
+            patient = patient_exited_form.cleaned_data["patient"]
+            if patient.nurse:
+                nurse = patient.nurse
+                nurse.number_of_patients -= 1
+                nurse.save(update_fields=["number_of_patients"])
 
-            # Case 2 (patient_id)
-            # patient_id = assign_patient_form.cleaned_data["patient_id"]
-            # patient = website.models.Patient.objects.get(patient_id=patient_id)
+            current_visit = website.models.Visit.objects.filter(patient_id=patient).order_by("-visit_id").first()
+            if current_visit:
+                current_visit.exiting_time = timezone.now()
+                current_visit.save(update_fields=["exiting_time"])
 
-            # if patient.nurse:
-            #     nurse = patient.nurse
-            #     nurse.number_of_patients = max((nurse.number_of_patients or 1) - 1, 0)
-            #     nurse.save(update_fields=["number_of_patients"])
+            patient.nurse = None
+            patient.save(update_fields=["nurse"])
 
-            # current_visit = website.models.Visit.objects.filter(patient_id=patient).order_by("-visit_id").first()
-            # if current_visit:
-            #     current_visit.exiting_time = timezone.now()
-            #     current_visit.save(update_fields=["exiting_time"])
+    all_assessments = (
+        website.models.TriageAssessment.objects
+        .select_related('vitals_id__visit_id')
+        .filter(vitals_id__visit_id__exiting_time__isnull=True)
+        .order_by('esi_level', 'vitals_id__visit_id__arrival_time')
+    )
+    all_staff = website.models.Staff.objects.all()
+    assign_patient_form = AssignNursetoPatientForm()
+    patient_exited_form = PatientExitedForm()
 
-            # patient.nurse = None
-            # patient.save(update_fields=["nurse"])
+    context = {
+        "all_assessments": all_assessments,
+        "all_staff": all_staff, 
+        "assign_patient_form": assign_patient_form, 
+        "patient_exited_form": patient_exited_form
+    } 
 
     return render(request, "nurse_workload.html", context)
