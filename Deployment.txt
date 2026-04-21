@@ -1,0 +1,2 @@
+if adding to static files, please run:
+python manage.py collectstatic
