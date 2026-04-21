@@ -147,16 +147,19 @@ class AddStaffToShiftForm(forms.Form):
     )
 
 class AssignNursetoPatientForm(forms.Form):
-    staff_to_add = forms.ModelChoiceField(
+    assigned_nurse = forms.ModelChoiceField(
         label = "Select a nurse to assign to this patient",
         queryset = Staff.objects.filter(shift_id__active=True), 
         widget = forms.Select(attrs={"class": "form-select"})
     )
 
 class PatientExitedForm(forms.Form):
-
-    patient_id = forms.ModelChoiceFIeld(
-        label = "Please select patient you would like to remove from this shift",
-        queryset = Staff.objects.filter(shift_id_active = True),
-        widget = forms.Select(attrs= {"class": "form-select"}) 
-    )
+    pass
+    # this is what is shown on the front end. we either need a dropdown with patients that have been assigned, or some place ot put a patient ID
+    # suggestions: either queryset = Patient.objects.filter(nurse != None)
+    # or replace whole thing with the syntax from PatientLeftForm(forms.Form):
+    # patient_id = forms.ModelChoiceField(
+    #     label = "Please select patient you would like to remove from this shift",
+    #     queryset = Staff.objects.filter(shift_id_active = True),
+    #     widget = forms.Select(attrs= {"class": "form-select"}) 
+    # )

@@ -234,36 +234,45 @@ def nurse_workload(request):
         "patient_exited_form": patient_exited_form
     } 
 
-
-    # TODO Assign nurse to patient (link staff_id to nurse on patient and increment number_of_patients on nurse)
-    # and delete patient from workload (add exit time to patient & set nurse to null)
     if "add_patient_submit" in request.POST:
-      patient_id = request.POST.get("patient_id")
-      nurse_id = request.POST.get("nurse_id")
+        assign_patient_form = AssignNursetoPatientForm(request.POST)
 
-      patient = website.models.Patient.objects.get(patient_id=patient_id)
-      nurse = website.models.Staff.objects.get(staff_id=nurse_id)
+        if assign_patient_form.is_valid():
+            new_nurse = assign_patient_form.cleaned_data["assigned_nurse"]
+            patient_id = request.POST.get("patient_id")
 
-      patient.nurse = nurse
-      patient.save(update_fields=["nurse"])
+            patient = website.models.Patient.objects.get(patient_id=patient_id)
 
-      nurse.number_of_patients = (nurse.number_of_patients or 0) + 1
-      nurse.save(update_fields=["number_of_patients"])
+            patient.nurse = new_nurse
+            patient.save(update_fields=["nurse"])
+
+            new_nurse.number_of_patients = (new_nurse.number_of_patients or 0) + 1
+            new_nurse.save(update_fields=["number_of_patients"])
 
     elif "patient_exited_submit" in request.POST:
-      patient_id = request.POST.get("patient_id")
-      patient = website.models.Patient.objects.get(patient_id=patient_id)
+        patient_exited_form = PatientExitedForm(request.POST)
 
-      if patient.nurse:
-        nurse = patient.nurse
-        nurse.number_of_patients = max((nurse.number_of_patients or 1) - 1, 0)
-        nurse.save(update_fields=["number_of_patients"])
+        if patient_exited_form.is_valid():
+            # passing until form and modal completion
+            pass
+            # Case 1(query set)
+            #patient = assign_patient_form.cleaned_data["patient"]
 
-    current_visit = website.models.Visit.objects.filter(patient_id=patient).order_by("-visit_id").first()
-    if current_visit:
-        current_visit.exiting_time = timezone.now()
-        current_visit.save(update_fields=["exiting_time"])
+            # Case 2 (patient_id)
+            # patient_id = assign_patient_form.cleaned_data["patient_id"]
+            # patient = website.models.Patient.objects.get(patient_id=patient_id)
 
-    patient.nurse = None
-    patient.save(update_fields=["nurse"])
+            # if patient.nurse:
+            #     nurse = patient.nurse
+            #     nurse.number_of_patients = max((nurse.number_of_patients or 1) - 1, 0)
+            #     nurse.save(update_fields=["number_of_patients"])
+
+            # current_visit = website.models.Visit.objects.filter(patient_id=patient).order_by("-visit_id").first()
+            # if current_visit:
+            #     current_visit.exiting_time = timezone.now()
+            #     current_visit.save(update_fields=["exiting_time"])
+
+            # patient.nurse = None
+            # patient.save(update_fields=["nurse"])
+
     return render(request, "nurse_workload.html", context)
