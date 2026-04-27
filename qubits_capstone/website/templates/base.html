@@ -27,17 +27,17 @@
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-left flex-grow-1 pe-3">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+           <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mx-lg-2" href="{% url 'patient_intake' %}">Patient Intake</a>
+            <a class="nav-link mx-lg-2 {% if request.resolver_match.url_name == 'patient_intake' %}active{% endif %}" href="{% url 'patient_intake' %}">Patient Intake</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mx-lg-2" href="{% url 'shift' %}">Shift Info</a>
+            <a class="nav-link mx-lg-2 {% if request.resolver_match.url_name == 'shift' %}active{% endif %}" href="{% url 'shift' %}">Shift Info</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mx-lg-2" href="{% url 'nurse_workload' %}">Nurse Workload</a>
+            <a class="nav-link mx-lg-2 {% if request.resolver_match.url_name == 'nurse_workload' %}active{% endif %}" href="{% url 'nurse_workload' %}">Nurse Workload</a>
           </li>
 
             </ul>
