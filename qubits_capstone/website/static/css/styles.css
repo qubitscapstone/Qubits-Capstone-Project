@@ -1,15 +1,4 @@
-body{
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
 
-}
-
-nav{
-   background: rgb(222, 222, 222);
-   width: 100%;
-   padding: 10px;
-}
 
 .img {
    background: url(/static/images/ER_1.jpg);
@@ -20,12 +9,37 @@ nav{
    position: relative;
 }
 
-.center{
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-   text-align: center;
-   color: aliceblue;
-   
+
+.logout-button {
+    background-color: rgb(99, 158, 216);
+    color: white;
+    font-size: 14px;
+    padding: 6px 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    transition: 0.3s background-color;
 }
+
+.logout-button:hover {
+    background-color: rgb(70, 90, 144);
+}
+
+.navbar-toggler {
+    border: none;
+    font-size: 1.25rem;
+}
+
+.navbar-toggler:focus, btn-close:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.nav-link {
+    color: rgb(197, 197, 197);
+    font-weight: 500;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: rgb(154, 163, 220);
+}
+

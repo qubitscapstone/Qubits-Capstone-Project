@@ -15,12 +15,49 @@
 </head>
 
 <body>
-
     <!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
+<div class="container-fluid">
+    <a class="navbar-brand fw-bold text-light" href="#">QUBITS</a>
+
+    <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">QUBITS</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-lg-2" href="{% url 'patient_intake' %}">Patient Intake</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-lg-2" href="{% url 'shift' %}">Shift Info</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mx-lg-2" href="{% url 'nurse_workload' %}">Nurse Workload</a>
+          </li>
+
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <a href="#" class="logout-button">Logout</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+    <!-- Navbar 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">ER Triage</a>
-            <!--  https://getbootstrap.com/docs/5.3/components/navbar/#nav  -->
+           https://getbootstrap.com/docs/5.3/components/navbar/#nav  
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" 
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -36,20 +73,9 @@
         </div>
 
     </nav> 
-
-    <!-- 
-<header>
-    <nav class="navbar">
-        <a href="#" class="nav-logo">
-        <h2 class="logo" > ⚕️QUBITS </h2>
-            <a class="nav-link" href="{% url 'home' %}">Home</a>
-            <a class="nav-link" href="{% url 'patient_intake' %}">Patient Intake</a>
-            <a class="nav-link" href="{% url 'shift' %}">Shift Info</a>
-            <a class="nav-link" href="{% url 'nurse_workload' %}">Nurse Workload</a>
-        </a>
-    </nav>    
-</header>
 -->
+
+    
     <!-- Messages -->
     {% for message in messages %}
         <div class="container-fluid p-0">
