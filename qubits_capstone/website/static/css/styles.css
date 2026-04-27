@@ -1,14 +1,5 @@
 
 
-.img {
-   background: url(/static/images/ER_1.jpg);
-   height: 100vh;
-   width: 100%;
-   background-position: center;
-   background-size: cover;
-   position: relative;
-}
-
 
 .logout-button {
     background-color: rgb(99, 158, 216);
@@ -43,3 +34,25 @@
     color: rgb(154, 163, 220);
 }
 
+.hero-section {
+    background: url(/static/images/ER_1.jpg) no-repeat center;
+    background-size: cover;
+    width: 100%;
+    
+}
+
+.hero-section::before {
+    background-color: rgba(0, 0, 0, 0.5);
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.hero-section .container {
+    height: 100vh;
+    z-index: 1;
+    position: relative;
+}
