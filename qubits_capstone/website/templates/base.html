@@ -46,7 +46,13 @@
       </div>
     </div>
 
-    <a href="#" class="logout-button">Logout</a>
+     <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <div class="button">
+          <button type="submit" class="logout-button">Log Out</button>
+        </div>
+      </form>
+      
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
     <span class="navbar-toggler-icon"></span>
     </button>
