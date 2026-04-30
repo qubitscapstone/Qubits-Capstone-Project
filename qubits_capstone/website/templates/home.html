@@ -6,7 +6,7 @@
   <!-- https://learndjango.com/tutorials/django-login-and-logout-tutorial -->
   {% if user.is_authenticated %}
 
-  <!-- Hero Section-->
+  <!-- Hero Section
  <section class="hero-section">
   <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
     <h1> Hi {{ user.first_name }} {{user.last_name}}! </h1>
@@ -16,8 +16,8 @@
     <p class="logout"><a href="#" class="logout-button">Logout</a></p>
   </div>
  </section>
-
-  <!-- 
+-->
+  
   <section class="hero">
     <div class="section-content">
       <div class="hero-details">
@@ -33,7 +33,7 @@
     </div>
     </div>
     </section>
-  -->
+  
   {% else %}
     <a href="{% url 'login' %}" class="btn btn-primary mt-3">
       Log in
