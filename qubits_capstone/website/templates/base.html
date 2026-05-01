@@ -16,7 +16,7 @@
 
 <body>
     <!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg sticky-top">
 <div class="container-fluid">
     <a class="navbar-brand fw-bold text-light" href="#">QUBITS</a>
 
@@ -58,29 +58,6 @@
     </button>
   </div>
 </nav>
-
-    <!-- Navbar 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">ER Triage</a>
-           https://getbootstrap.com/docs/5.3/components/navbar/#nav  
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" 
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-                <a class="nav-link" href="{% url 'patient_intake' %}">Patient Intake</a>
-                <a class="nav-link" href="{% url 'shift' %}">Shift Info</a>
-                <a class="nav-link" href="{% url 'nurse_workload' %}">Nurse Workload</a>
-            </div>
-        </div>
-
-    </nav> 
--->
-
     
     <!-- Messages -->
     {% for message in messages %}
