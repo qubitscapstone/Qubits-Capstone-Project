@@ -6,23 +6,12 @@
   <!-- https://learndjango.com/tutorials/django-login-and-logout-tutorial -->
   {% if user.is_authenticated %}
 
-  <!-- Hero Section
- <section class="hero-section">
-  <div class="container d-flex align-items-center justify-content-center fs-1 text-white flex-column">
-    <h1> Hi {{ user.first_name }} {{user.last_name}}! </h1>
-    <h2> Welcome to the ER Triage</h2>
-    <h6> (Login successful)</h6>
-    
-    <p class="logout"><a href="#" class="logout-button">Logout</a></p>
-  </div>
- </section>
--->
   
-    <div class="d-flex align-items-center justify-content-center vh-100 text-white"
+    <div class="container-fluid mt-4 align-items-center justify-content-center vh-100 text-white"
     style="background-image: url('/static/images/ER_1.jpg');
     background-size: cover;
     background-position: center;"> 
-        <h1> Welcome {{ user.first_name }} {{user.last_name}}! </h1>
+        <h1> Welcome {{ user.first_name }} {{user.last_name}}! </h1> <br>
        <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
         <div class="button">
