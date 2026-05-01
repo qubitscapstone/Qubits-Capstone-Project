@@ -11,7 +11,7 @@
     style="background-image: url('/static/images/ER_1.jpg');
     background-size: cover;
     background-position: center;"> 
-        <h1> Welcome {{ user.first_name }} {{user.last_name}}! </h1> <br> <br>
+        <h1> Welcome {{ user.first_name }} {{user.last_name}}! </h1> 
        <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
         <div class="button">
