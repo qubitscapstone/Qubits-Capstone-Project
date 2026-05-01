@@ -18,8 +18,8 @@
  </section>
 -->
   
-  <section class="hero">
-    <div class="section-content" style="background-image: url('/static/images/ER_1.jpg');">
+  <section class="hero" style="background-image: url('/static/images/ER_1.jpg')">
+    <div class="section-content">
       <div class="hero-details">
         <h1> Welcome {{ user.first_name }} {{user.last_name}}! </h1>
       <form action="{% url 'logout' %}" method="post">
