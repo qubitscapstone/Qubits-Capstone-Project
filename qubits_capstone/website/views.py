@@ -229,6 +229,12 @@ def nurse_workload(request):
 
             patient = website.models.Patient.objects.get(patient_id=patient_id)
 
+            #update the number of patients for the old nurse
+            if patient.nurse != None:
+                old_nurse = patient.nurse
+                old_nurse.number_of_patients -= 1
+                old_nurse.save()
+
             patient.nurse = new_nurse
             patient.save(update_fields=["nurse"])
 
